@@ -1,0 +1,229 @@
+/* General reset and body styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    background-color: #f0f4f8; /* Fondo gris claro */
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  /* Container for the whole content */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    /* Eliminar box-shadow */
+  }
+  
+  /* Header Styling */
+  .header {
+    margin-bottom: 30px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 36px;
+    font-weight: bolder;
+    color: #1e3a8a;
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3a8a;
+  }
+  
+  p {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  li {
+    font-size: 16px;
+    color: #333;
+    margin: 5px 0;
+  }
+  
+  /* Form styles */
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  
+  label {
+    font-size: 16px;
+    color: #444;
+    font-weight: bold;
+  }
+  
+  input,
+  select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    transition: all 0.3s ease;
+  }
+  
+  /* Input and select focus effect */
+  input:focus,
+  select:focus {
+    border-color: #1e3a8a; /* Azul */
+    outline: none;
+  }
+  
+  /* Placeholder color */
+  input::placeholder,
+  select::placeholder {
+    color: #aaa;
+  }
+  
+  /* Input type number */
+  input[type="number"] {
+    -moz-appearance: textfield; /* Eliminar flechas */
+    -webkit-appearance: none;
+  }
+  
+  /* Button styling */
+  .button-container {
+    margin-top: 30px;
+  }
+  
+  button {
+    background-color: #1e3a8a; /* Azul */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  button:hover {
+    background-color: #2563eb; /* Azul más claro */
+    transform: translateY(-3px);
+  }
+  
+  button:active {
+    background-color: #1e40af; /* Azul oscuro */
+    transform: translateY(1px);
+  }
+  
+  button:focus {
+    outline: none;
+  }
+  
+  .button-container button {
+    background-color: #fb923c;
+  }
+  
+  .button-container button:hover {
+    background-color: #ea580c;
+  }
+
+  .info-card {
+    background-color: #fff;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .info-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+  }
+  
+  .info-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .modificar-btn,
+  .eliminar-btn {
+    padding: 8px 15px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .modificar-btn {
+    background-color: #1e3a8a;
+    color: white;
+  }
+  
+  .modificar-btn:hover {
+    background-color: #2563eb;
+  }
+  
+  .modificar-btn:active {
+    background-color: #1e40af;
+  }
+  
+  .eliminar-btn {
+    background-color: #dc3545;
+    color: white;
+  }
+  
+  .eliminar-btn:hover {
+    background-color: #c82333; 
+  }
+  
+  .eliminar-btn:active {
+    background-color: #b02a2a;
+  }
+
+  .crear-btn {
+    background-color: #22c55e; 
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 20px auto;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .crear-btn:hover {
+    background-color: #16a34a;
+    transform: translateY(-3px);
+  }
+  
+  .crear-btn:active {
+    background-color: #15803d;
+    transform: translateY(1px);
+  }
+
+  
