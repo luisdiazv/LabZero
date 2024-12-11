@@ -1,20 +1,19 @@
 import "./Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPersonas, eliminarPersonaAPI } from "../API/supabaseAPI";
+import { readAllPersona, deletePersona } from "../Ctrl/PersonaCtrl";
 
 const Personas = () => {
   const [personas, setPersonas] = useState([]);
-  const [cargando, setCargando] = useState(true); // Estado de carga
-  const [eliminando, setEliminando] = useState(false); // Control de estado al eliminar
+  const [cargando, setCargando] = useState(true);
+  const [eliminando, setEliminando] = useState({}); // Cambié el estado para manejarlo por persona
   const navegar = useNavigate();
 
-  // Función para cargar personas desde la base de datos
   useEffect(() => {
     const cargarPersonas = async () => {
       try {
         setCargando(true);
-        const { data, error } = await fetchPersonas();
+        const { data, error } = await readAllPersona();
         if (error) {
           console.error("Error al obtener personas:", error);
           alert("Hubo un problema al cargar las personas.");
@@ -32,12 +31,11 @@ const Personas = () => {
     cargarPersonas();
   }, []);
 
-  // Función para eliminar una persona
   const eliminarPersona = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar esta persona?")) {
       try {
-        setEliminando(true);
-        const { error } = await eliminarPersonaAPI(id);
+        setEliminando((prev) => ({ ...prev, [id]: true })); // Setea el estado de la persona eliminada como 'true'
+        const { error } = await deletePersona(id);
         if (error) {
           console.error("Error al eliminar persona:", error);
           alert("Hubo un problema al eliminar la persona.");
@@ -49,7 +47,7 @@ const Personas = () => {
         console.error("Error inesperado:", err);
         alert("Hubo un error inesperado al eliminar la persona.");
       } finally {
-        setEliminando(false);
+        setEliminando((prev) => ({ ...prev, [id]: false })); // Restaura el estado de 'eliminando' después de la eliminación
       }
     }
   };
@@ -60,13 +58,13 @@ const Personas = () => {
         <h1>CRUD</h1>
       </div>
       <div className="button-container text-center">
+        <button onClick={() => navegar("/")}>Inicio</button>
         <button onClick={() => navegar("/personas")}>Personas</button>
         <button onClick={() => navegar("/viviendas")}>Viviendas</button>
         <button onClick={() => navegar("/municipios")}>Municipios</button>
         <button onClick={() => navegar("/propVivienda")}>Propiedad de Vivienda</button>
       </div>
 
-      {/* Mostrar el botón de Crear Persona solo después de cargar */}
       {!cargando && (
         <div className="text-center">
           <button className="crear-btn" onClick={() => navegar("/crear-persona")}>
@@ -97,9 +95,9 @@ const Personas = () => {
                 <button 
                   className="eliminar-btn" 
                   onClick={() => eliminarPersona(persona.id)}
-                  disabled={eliminando}
+                  disabled={eliminando[persona.id] || false} // Desactiva el botón solo si la persona está siendo eliminada
                 >
-                  {eliminando ? "Eliminando..." : "Eliminar"}
+                  {eliminando[persona.id] ? "Eliminando..." : "Eliminar"}
                 </button>
               </div>
             </div>
