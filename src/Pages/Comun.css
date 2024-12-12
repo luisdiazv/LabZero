@@ -1,4 +1,3 @@
-/* General reset and body styling */
 * {
   margin: 0;
   padding: 0;
@@ -6,13 +5,12 @@
 }
 
 body {
-  background-color: #f0f4f8; /* Fondo gris claro */
+  background-color: #f0f4f8;
   font-family: Arial, sans-serif;
   color: #333;
   line-height: 1.6;
 }
 
-/* Container for the whole content */
 .container {
   width: 100%;
   max-width: 1200px;
@@ -20,10 +18,8 @@ body {
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
-  /* Eliminar box-shadow */
 }
 
-/* Header Styling */
 .header {
   margin-bottom: 30px;
 }
@@ -61,7 +57,6 @@ li {
   margin: 5px 0;
 }
 
-/* Form styles */
 form {
   display: flex;
   flex-direction: column;
@@ -89,32 +84,28 @@ select {
   transition: all 0.3s ease;
 }
 
-/* Input and select focus effect */
 input:focus,
 select:focus {
-  border-color: #1e3a8a; /* Azul */
+  border-color: #1e3a8a;
   outline: none;
 }
 
-/* Placeholder color */
 input::placeholder,
 select::placeholder {
   color: #aaa;
 }
 
-/* Input type number */
 input[type="number"] {
-  -moz-appearance: textfield; /* Eliminar flechas */
+  -moz-appearance: textfield;
   -webkit-appearance: none;
 }
 
-/* Button styling */
 .button-container {
   margin-top: 30px;
 }
 
 button {
-  background-color: #1e3a8a; /* Azul */
+  background-color: #1e3a8a;
   color: white;
   border: none;
   padding: 12px 20px;
@@ -126,12 +117,12 @@ button {
 }
 
 button:hover {
-  background-color: #2563eb; /* Azul más claro */
+  background-color: #2563eb;
   transform: translateY(-3px);
 }
 
 button:active {
-  background-color: #1e40af; /* Azul oscuro */
+  background-color: #1e40af;
   transform: translateY(1px);
 }
 
@@ -140,25 +131,24 @@ button:focus {
 }
 
 .button-container button:not(.inicio-btn) {
-  background-color: #fb923c; /* Naranja */
+  background-color: #fb923c;
 }
 
 .button-container button:not(.inicio-btn):hover {
   background-color: #ea580c;
 }
 
-/* Especifico para el botón Inicio */
 .inicio-btn {
-  background-color: #1e3a8a; /* Azul */
+  background-color: #1e3a8a;
   color: white;
 }
 
 .inicio-btn:hover {
-  background-color: #2563eb; /* Azul más claro */
+  background-color: #2563eb;
 }
 
 .inicio-btn:active {
-  background-color: #1e40af; /* Azul oscuro */
+  background-color: #1e40af;
 }
 
 .info-card {
