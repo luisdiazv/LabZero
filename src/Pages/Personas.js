@@ -1,12 +1,13 @@
 import "./Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { readAllPersona, deletePersona } from "../Ctrl/PersonaCtrl";
+import { readAllPersona, deletePersona, readPersona } from "../Ctrl/PersonaCtrl";
 
 const Personas = () => {
   const [personas, setPersonas] = useState([]);
+  const [nombresCabeza, setNombresCabeza] = useState({});
   const [cargando, setCargando] = useState(true);
-  const [eliminando, setEliminando] = useState({}); // Cambié el estado para manejarlo por persona
+  const [eliminando, setEliminando] = useState({});
   const navegar = useNavigate();
 
   useEffect(() => {
@@ -19,6 +20,23 @@ const Personas = () => {
           alert("Hubo un problema al cargar las personas.");
         } else {
           setPersonas(data);
+
+          const idsCabezas = data
+            .filter((persona) => persona.cabezafamilia)
+            .map((persona) => persona.cabezafamilia);
+
+          const nombres = {};
+          await Promise.all(
+            idsCabezas.map(async (id) => {
+              const { data: personaData, error: errorPersona } = await readPersona(id);
+              if (errorPersona) {
+                console.error(`Error al obtener cabeza de familia con ID ${id}:`, errorPersona);
+              } else if (personaData && personaData.length > 0) {
+                nombres[id] = personaData[0].nombre;
+              }
+            })
+          );
+          setNombresCabeza(nombres);
         }
       } catch (err) {
         console.error("Error inesperado:", err);
@@ -34,7 +52,7 @@ const Personas = () => {
   const eliminarPersona = async (id) => {
     if (window.confirm("¿Estás seguro de que deseas eliminar esta persona?")) {
       try {
-        setEliminando((prev) => ({ ...prev, [id]: true })); // Setea el estado de la persona eliminada como 'true'
+        setEliminando((prev) => ({ ...prev, [id]: true }));
         const { error } = await deletePersona(id);
         if (error) {
           console.error("Error al eliminar persona:", error);
@@ -47,7 +65,7 @@ const Personas = () => {
         console.error("Error inesperado:", err);
         alert("Hubo un error inesperado al eliminar la persona.");
       } finally {
-        setEliminando((prev) => ({ ...prev, [id]: false })); // Restaura el estado de 'eliminando' después de la eliminación
+        setEliminando((prev) => ({ ...prev, [id]: false }));
       }
     }
   };
@@ -56,9 +74,11 @@ const Personas = () => {
     <div className="container">
       <div className="header text-center">
         <h1>CRUD</h1>
+        <h1>Personas</h1>
       </div>
+      
       <div className="button-container text-center">
-        <button onClick={() => navegar("/")}>Inicio</button>
+        <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
         <button onClick={() => navegar("/personas")}>Personas</button>
         <button onClick={() => navegar("/viviendas")}>Viviendas</button>
         <button onClick={() => navegar("/municipios")}>Municipios</button>
@@ -79,23 +99,29 @@ const Personas = () => {
         ) : personas.length > 0 ? (
           personas.map((persona) => (
             <div className="info-card" key={persona.id}>
-              <h3>{persona.nombre}</h3>
+              <h2>{persona.nombre}</h2>
+              <p><strong>Documento Identidad:</strong> {persona.documentoidentidad}</p>
               <p><strong>Teléfono:</strong> {persona.telefono}</p>
               <p><strong>Edad:</strong> {persona.edad}</p>
               <p><strong>Sexo:</strong> {persona.sexo}</p>
-              <p><strong>ID Vivienda:</strong> {persona.vivienda_id_viv}</p>
-              <p><strong>ID Persona DI-IV:</strong> {persona.persona_di_iv}</p>
-              <p><strong>ID Municipio:</strong> {persona.municipio_id_mun}</p>
-              <p><strong>ID Persona Padre:</strong> {persona.parent_persona_id}</p>
+              <p><strong>Vivienda ID:</strong> {persona.viviendaid}</p>
+              <p>
+                <strong>Cabeza de Familia:</strong>{" "}
+                {persona.cabezafamilia ? (
+                  nombresCabeza[persona.cabezafamilia]
+                ) : (
+                  "No aplica"
+                )}
+              </p>
 
               <div className="info-buttons">
-                <button className="modificar-btn" onClick={() => navegar(`/editar-persona/${persona.id}`)}>
+                <button className="modificar-btn" onClick={() => navegar(`/modificar-persona/${persona.id}`)}>
                   Modificar
                 </button>
-                <button 
-                  className="eliminar-btn" 
+                <button
+                  className="eliminar-btn"
                   onClick={() => eliminarPersona(persona.id)}
-                  disabled={eliminando[persona.id] || false} // Desactiva el botón solo si la persona está siendo eliminada
+                  disabled={eliminando[persona.id] || false}
                 >
                   {eliminando[persona.id] ? "Eliminando..." : "Eliminar"}
                 </button>
