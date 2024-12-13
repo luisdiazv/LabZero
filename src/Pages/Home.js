@@ -21,9 +21,15 @@ const Home = () => {
       </div>
       <div className="button-container text-center">
         <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-        <button id="Viviendas" onClick={() => navegar("/viviendas")}>Viviendas</button>
-        <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-        <button id="Propiedad de Vivienda" onClick={() => navegar("/propVivienda")}>Propiedad de Vivienda</button>
+        <button id="Viviendas" onClick={() => navegar("/")}></button>
+        <button id="Municipios" onClick={() => navegar("/")}></button>
+        <button id="Propiedad de Vivienda" onClick={() => navegar("/")}></button>
+      </div>
+      <div className="button-container text-center">
+        <button id="Pais" onClick={() => navegar("/paises")}>Paises</button>
+        <button id="Viviendas" onClick={() => navegar("/")}></button>
+        <button id="Municipios" onClick={() => navegar("/")}></button>
+        <button id="Propiedad de Vivienda" onClick={() => navegar("/")}></button>
       </div>
     </div>
   );
