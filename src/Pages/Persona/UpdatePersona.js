@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { readAllPersona, readPersona, updatePersona } from "../../Ctrl/PersonaCtrl";
+import "../Comun.css";
 
 const ModificarPersona = () => {
     const { id } = useParams();
@@ -12,7 +13,6 @@ const ModificarPersona = () => {
     const [telefonoError, setTelefonoError] = useState("");
     const navegar = useNavigate();
 
-    // Cargar las personas que son cabeza de familia
     useEffect(() => {
         const cargarPersona = async () => {
             try {
@@ -56,7 +56,7 @@ const ModificarPersona = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setPersona({ ...persona, [name]: value });
-        
+
         if (name === "edad") {
             if (value <= 0 || isNaN(value)) {
                 setEdadError("La edad debe ser un número mayor que 0.");
@@ -105,15 +105,19 @@ const ModificarPersona = () => {
         }
     };
 
+    const handleCancel = () => {
+        navegar("/personas");
+    };
+
     if (cargando) {
-        return <p>Cargando datos...</p>;
+        return <p className="loading-text">Cargando datos...</p>;
     }
 
     return (
         <div className="container">
-            <h1>Modificar Persona</h1>
+            <h1 className="form-title">Modificar Persona</h1>
             {persona && (
-                <form onSubmit={handleSubmit}>
+                <form className="crud-form" onSubmit={handleSubmit}>
                     <input
                         type="text"
                         name="nombre"
@@ -121,15 +125,8 @@ const ModificarPersona = () => {
                         value={persona.nombre}
                         onChange={handleChange}
                         required
+                        className="form-input"
                     />
-                    {/* <input
-                        type="text"
-                        name="documentoidentidad"
-                        placeholder="Documento de Identidad"
-                        value={persona.documentoidentidad}
-                        onChange={handleChange}
-                        required
-                    /> */}
                     <input
                         type="text"
                         name="telefono"
@@ -137,8 +134,9 @@ const ModificarPersona = () => {
                         value={persona.telefono}
                         onChange={handleChange}
                         required
+                        className="form-input"
                     />
-                    {telefonoError && <p style={{ color: "red" }}>{telefonoError}</p>}
+                    {telefonoError && <p className="error-message">{telefonoError}</p>}
                     <input
                         type="number"
                         name="edad"
@@ -146,9 +144,16 @@ const ModificarPersona = () => {
                         value={persona.edad}
                         onChange={handleChange}
                         required
+                        className="form-input"
                     />
-                    {edadError && <p style={{ color: "red" }}>{edadError}</p>}
-                    <select name="sexo" value={persona.sexo} onChange={handleChange} required>
+                    {edadError && <p className="error-message">{edadError}</p>}
+                    <select
+                        name="sexo"
+                        value={persona.sexo}
+                        onChange={handleChange}
+                        required
+                        className="form-select"
+                    >
                         <option value="Masculino">Masculino</option>
                         <option value="Femenino">Femenino</option>
                     </select>
@@ -157,6 +162,7 @@ const ModificarPersona = () => {
                         name="cabezafamilia"
                         value={persona.cabezafamilia}
                         onChange={handleChange}
+                        className="form-select"
                     >
                         <option value={null}>Seleccionar Cabeza de Familia (opcional)</option>
                         {personasCabeza.map((cabeza) => (
@@ -165,9 +171,24 @@ const ModificarPersona = () => {
                             </option>
                         ))}
                     </select>
-                    <button type="submit" disabled={actualizando}>
-                        {actualizando ? "Actualizando..." : "Actualizar"}
-                    </button>
+
+                    {/* Botones en la misma línea */}
+                    <div className="form-buttons">
+                        <button
+                            type="submit"
+                            disabled={actualizando}
+                            className="form-button form-button-small"
+                        >
+                            {actualizando ? "Actualizando..." : "Actualizar"}
+                        </button>
+                        <button
+                            type="button"
+                            onClick={handleCancel}
+                            className="form-button form-button-small cancel-button red-button"
+                        >
+                            Cancelar
+                        </button>
+                    </div>
                 </form>
             )}
         </div>

@@ -88,7 +88,7 @@ const Personas = () => {
 
       {!cargando && (
         <div className="text-center">
-          <button className="crear-btn" onClick={() => navegar("/crear-persona")}>
+          <button className="crear-btn" onClick={() => navegar("/personas/crear-persona")}>
             Crear Persona
           </button>
         </div>
@@ -115,7 +115,7 @@ const Personas = () => {
               </p>
 
               <div className="info-buttons">
-                <button className="modificar-btn" onClick={() => navegar(`/modificar-persona/${persona.id_persona}`)}>
+                <button className="modificar-btn" onClick={() => navegar(`/personas/modificar-persona/${persona.id_persona}`)}>
                   Modificar
                 </button>
                 <button

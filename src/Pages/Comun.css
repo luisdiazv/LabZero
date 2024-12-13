@@ -196,16 +196,16 @@ button:focus {
 }
 
 .eliminar-btn {
-  background-color: #dc3545;
+  background-color: red;
   color: white;
 }
 
 .eliminar-btn:hover {
-  background-color: #c82333; 
+  background-color: darkred; 
 }
 
 .eliminar-btn:active {
-  background-color: #b02a2a;
+  background-color: #480202;
 }
 
 .crear-btn {
@@ -228,4 +228,21 @@ button:focus {
 .crear-btn:active {
   background-color: #15803d;
   transform: translateY(1px);
+}
+
+.red-button {
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.red-button:hover {
+  background-color: darkred;
+  transform: translateY(-3px);
 }

@@ -5,7 +5,6 @@ import { createPersona, readAllPersona } from "../../Ctrl/PersonaCtrl";
 const CrearPersona = () => {
     const [persona, setPersona] = useState({
         nombre: "",
-        // documentoidentidad: "",  // Documento de Identidad (dejar comentado)
         telefono: "",
         edad: "",
         sexo: "",
@@ -42,7 +41,6 @@ const CrearPersona = () => {
         const { name, value } = e.target;
         setPersona({ ...persona, [name]: value });
 
-        // Verificación de la edad
         if (name === "edad") {
             if (value <= 0 || isNaN(value)) {
                 setEdadError("La edad debe ser un número mayor que 0.");
@@ -65,12 +63,12 @@ const CrearPersona = () => {
 
         if (edadError || persona.edad <= 0 || persona.edad === "") {
             setEdadError("La edad debe ser un número mayor que 0.");
-            return; // No continuar si hay un error en la edad
+            return;
         }
         
         if (telefonoError || persona.telefono.length < 7) {
             setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
-            return; // No continuar si hay un error en el teléfono
+            return;
         }
 
         setCargando(true);
@@ -91,6 +89,11 @@ const CrearPersona = () => {
         }
     };
 
+    // Función para manejar el cancel
+    const handleCancel = () => {
+        navegar("/personas");
+    };
+
     return (
         <div className="container">
             <h1>Crear Persona</h1>
@@ -103,14 +106,6 @@ const CrearPersona = () => {
                     onChange={handleChange}
                     required
                 />
-                {/* <input
-                    type="text"
-                    name="documentoidentidad"
-                    placeholder="Documento de Identidad"
-                    value={persona.documentoidentidad}
-                    onChange={handleChange}
-                    required
-                /> */}
                 <input
                     type="text"
                     name="telefono"
@@ -119,7 +114,7 @@ const CrearPersona = () => {
                     onChange={handleChange}
                     required
                 />
-                {telefonoError && <p style={{ color: "red" }}>{telefonoError}</p>} {/* Mostrar mensaje de error */}
+                {telefonoError && <p style={{ color: "red" }}>{telefonoError}</p>}
                 <input
                     type="number"
                     name="edad"
@@ -128,7 +123,7 @@ const CrearPersona = () => {
                     onChange={handleChange}
                     required
                 />
-                {edadError && <p style={{ color: "red" }}>{edadError}</p>} {/* Mostrar mensaje de error */}
+                {edadError && <p style={{ color: "red" }}>{edadError}</p>}
                 <select name="sexo" value={persona.sexo} onChange={handleChange} required>
                     <option value="">Seleccione el Sexo</option>
                     <option value="Masculino">Masculino</option>
@@ -146,9 +141,16 @@ const CrearPersona = () => {
                         </option>
                     ))}
                 </select>
-                <button type="submit" disabled={cargando}>
-                    {cargando ? "Creando..." : "Crear"}
-                </button>
+
+                {/* Botones en la misma línea */}
+                <div className="form-buttons">
+                    <button type="submit" disabled={cargando} className="form-button form-button-small">
+                        {cargando ? "Creando..." : "Crear"}
+                    </button>
+                    <button type="button" onClick={handleCancel} className="form-button form-button-small cancel-button red-button">
+                        Cancelar
+                    </button>
+                </div>
             </form>
         </div>
     );
