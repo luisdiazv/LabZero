@@ -6,13 +6,14 @@ import { obtenerPersonasIDNombre } from "../../Ctrl/PersonaCtrl";
 const ModificarPais = () => {
   const { id } = useParams();
   const [pais, setPais] = useState(null);
-  const [personas, setPersonas] = useState([]); // Para almacenar las personas
+  const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [actualizando, setActualizando] = useState(false);
   const navegar = useNavigate();
 
   useEffect(() => {
     const cargarPaisYPersonas = async () => {
+
       // Cargar el país
       const { data: paisData, error: paisError } = await readPais(id);
       if (paisError) {

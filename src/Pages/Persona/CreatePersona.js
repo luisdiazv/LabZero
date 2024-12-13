@@ -13,8 +13,8 @@ const CrearPersona = () => {
     });
     const [personasCabeza, setPersonasCabeza] = useState([]);
     const [cargando, setCargando] = useState(false);
-    const [edadError, setEdadError] = useState(""); // Estado para el error de edad
-    const [telefonoError, setTelefonoError] = useState(""); // Estado para el error de teléfono
+    const [edadError, setEdadError] = useState("");
+    const [telefonoError, setTelefonoError] = useState("");
     const navegar = useNavigate();
 
     // Cargar las personas que son cabeza de familia
@@ -47,16 +47,15 @@ const CrearPersona = () => {
             if (value <= 0 || isNaN(value)) {
                 setEdadError("La edad debe ser un número mayor que 0.");
             } else {
-                setEdadError(""); // Limpiar error si la edad es válida
+                setEdadError("");
             }
         }
-
-        // Verificación de teléfono
+        
         if (name === "telefono") {
             if (value.length < 7 || isNaN(value)) {
                 setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
             } else {
-                setTelefonoError(""); // Limpiar error si el teléfono es válido
+                setTelefonoError("");
             }
         }
     };
@@ -64,13 +63,11 @@ const CrearPersona = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Verificación de la edad antes de enviar el formulario
         if (edadError || persona.edad <= 0 || persona.edad === "") {
             setEdadError("La edad debe ser un número mayor que 0.");
             return; // No continuar si hay un error en la edad
         }
-
-        // Verificación de teléfono antes de enviar el formulario
+        
         if (telefonoError || persona.telefono.length < 7) {
             setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
             return; // No continuar si hay un error en el teléfono
