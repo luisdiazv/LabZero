@@ -1,53 +1,62 @@
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
-import { createPais } from "../../Ctrl/PaisCtrl";
-import { obtenerPersonasIDNombre } from "../../Ctrl/PersonaCtrl";
+import { createPais } from "../../Ctrl/PaisCtrl";  
+import { obtenerPersonasIDNombre } from "../../Ctrl/PersonaCtrl";  
 
 const CrearPais = () => {
   const [pais, setPais] = useState({
-    nombre: "",
-    presidenteid: null,
+    nombre: "",         
+    presidenteid: "",   
   });
-  const [personas, setPersonas] = useState([]);
-  const [cargando, setCargando] = useState(false);
-  const navegar = useNavigate();
+  const [personas, setPersonas] = useState([]);  
+  const [cargando, setCargando] = useState(false);  
+  const navegar = useNavigate();  
 
-  // Cargar las personas disponibles para ser presidente
   useEffect(() => {
     const cargarPersonas = async () => {
       try {
-        const { data: personasData, error: personasError } = await obtenerPersonasIDNombre();
-        if (personasError) {
-          console.error("Error al cargar las personas:", personasError);
+        const { data, error } = await obtenerPersonasIDNombre();
+        if (error) {
+          console.error("Error al cargar las personas:", error);
           alert("Hubo un problema al cargar las personas.");
         } else {
-          setPersonas(personasData); // Guardamos las personas
+          setPersonas(data);  
         }
       } catch (err) {
         console.error("Error inesperado:", err);
         alert("Hubo un error inesperado.");
       }
     };
-
     cargarPersonas();
-  }, []);
+  }, []);  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPais({ ...pais, [name]: value });
+    setPais({
+      ...pais,
+      [name]: value,  
+    });
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setCargando(true);
-    const { data, error } = await createPais(pais);
-    if (error) {
-      alert("Error al crear el país");
-    } else {
-      alert(`País creado exitosamente: ${data.nombre}`);
-      navegar("/paises");
+    e.preventDefault();  
+
+    setCargando(true);  
+
+    try {
+      const { error } = await createPais(pais);
+      if (error) {
+        alert("Error al crear el país.");
+      } else {
+        alert("País creado exitosamente.");
+        navegar("/paises");  
+      }
+    } catch (err) {
+      console.error("Error al crear el país:", err);
+      alert("Hubo un error al crear el país.");
+    } finally {
+      setCargando(false);  
     }
-    setCargando(false);
   };
 
   return (
@@ -65,7 +74,7 @@ const CrearPais = () => {
         
         <select
           name="presidenteid"
-          value={pais.presidenteid || ""}
+          value={pais.presidenteid}
           onChange={handleChange}
           required
         >
@@ -81,7 +90,11 @@ const CrearPais = () => {
           <button type="submit" disabled={cargando} className="form-button create-button">
             {cargando ? "Creando..." : "Crear País"}
           </button>
-          <button type="button" onClick={() => navegar("/paises")} className="form-button cancel-button red-button">
+          <button 
+            type="button" 
+            onClick={() => navegar("/paises")} 
+            className="form-button cancel-button red-button"
+          >
             Cancelar
           </button>
         </div>

@@ -46,15 +46,16 @@ export const deletePais = async (id) => {
 export const createPais = async (pais) => {
   try {
     const { data, error } = await supabase.from("pais").insert(pais);
+
     if (error) {
-      console.error("Error al crear el país:", error);
-      return { data: null, error };
+        console.error("Error al crear pais:", error);
+        return { data: null, error };
     }
     return { data, error: null };
-  } catch (err) {
-    console.error("Error inesperado al crear el país:", err);
+} catch (err) {
+    console.error("Error inesperado al crear pais:", err);
     return { data: null, error: err };
-  }
+}
 };
 
 export const updatePais = async (id, updates) => {
