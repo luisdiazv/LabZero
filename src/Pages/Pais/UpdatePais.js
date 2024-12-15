@@ -12,7 +12,7 @@ const ModificarPais = () => {
   const navegar = useNavigate();
 
   useEffect(() => {
-    const cargarPaisYPersonas = async () => {
+    const cargarPaisPersonas = async () => {
       const { data: paisData, error: paisError } = await readPais(id);
       if (paisError) {
         alert("Error al cargar el país");
@@ -31,7 +31,7 @@ const ModificarPais = () => {
       setCargando(false);
     };
 
-    cargarPaisYPersonas();
+    cargarPaisPersonas();
   }, [id, navegar]);
 
   const handleChange = (e) => {
@@ -42,18 +42,25 @@ const ModificarPais = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setActualizando(true);
-    const { data, error } = await updatePais(id, pais);
-    if (error) {
-      alert("Error al modificar el país");
-    } else {
-      alert(`País modificado exitosamente: ${data.nombre}`);
-      navegar("/paises");
+    try {
+      const { error } = await updatePais(id, pais);
+      if (error) {
+        console.error("Error al modificar pais:", error);
+        alert("Hubo un problema al modificar el pais.");
+      } else {
+        alert("Persona modificada exitosamente.");
+        navegar("/paises");
+      }
+    } catch (err) {
+      console.error("Error inesperado:", err);
+      alert("Hubo un error inesperado al modificar el pais.");
+    } finally {
+      setActualizando(false);
     }
-    setActualizando(false);
   };
 
   if (cargando) {
-    return <p>Cargando...</p>;
+    return <p className="loading-text">Cargando datos...</p>;
   }
 
   return (

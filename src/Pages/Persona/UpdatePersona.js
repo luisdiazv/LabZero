@@ -105,10 +105,6 @@ const ModificarPersona = () => {
         }
     };
 
-    const handleCancel = () => {
-        navegar("/personas");
-    };
-
     if (cargando) {
         return <p className="loading-text">Cargando datos...</p>;
     }
@@ -181,11 +177,7 @@ const ModificarPersona = () => {
                         >
                             {actualizando ? "Actualizando..." : "Actualizar"}
                         </button>
-                        <button
-                            type="button"
-                            onClick={handleCancel}
-                            className="form-button form-button-small cancel-button red-button"
-                        >
+                        <button type="button" onClick={() => navegar("/paises")} className="form-button cancel-button red-button">
                             Cancelar
                         </button>
                     </div>

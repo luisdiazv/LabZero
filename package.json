@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "@supabase/supabase-js": "^2.47.2",
-    "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "lab_zero": "file:",
     "react": "18.0.0",

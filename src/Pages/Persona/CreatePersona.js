@@ -89,11 +89,6 @@ const CrearPersona = () => {
         }
     };
 
-    // Función para manejar el cancel
-    const handleCancel = () => {
-        navegar("/personas");
-    };
-
     return (
         <div className="container">
             <h1>Crear Persona</h1>
@@ -147,7 +142,11 @@ const CrearPersona = () => {
                     <button type="submit" disabled={cargando} className="form-button form-button-small">
                         {cargando ? "Creando..." : "Crear"}
                     </button>
-                    <button type="button" onClick={handleCancel} className="form-button form-button-small cancel-button red-button">
+                    <button 
+                        type="button" 
+                        onClick={() => navegar("/personas")} 
+                        className="form-button cancel-button red-button"
+                    >
                         Cancelar
                     </button>
                 </div>
