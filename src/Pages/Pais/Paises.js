@@ -48,7 +48,7 @@ const Paises = () => {
 
       {!cargando && (
         <div className="text-center">
-          <button className="crear-btn" onClick={() => navegar("/crear-pais")}>
+          <button className="crear-btn" onClick={() => navegar("/paises/crear-pais")}>
             Crear País
           </button>
         </div>
@@ -64,7 +64,7 @@ const Paises = () => {
               <p><strong>Presidente:</strong> {pais.presidente}</p>
 
               <div className="info-buttons">
-                <button className="modificar-btn" onClick={() => navegar(`/modificar-pais/${pais.id_pais}`)}>
+                <button className="modificar-btn" onClick={() => navegar(`/paises/modificar-pais/${pais.id_pais}`)}>
                   Modificar
                 </button>
                 <button

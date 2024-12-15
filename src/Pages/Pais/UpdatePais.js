@@ -13,8 +13,6 @@ const ModificarPais = () => {
 
   useEffect(() => {
     const cargarPaisYPersonas = async () => {
-
-      // Cargar el país
       const { data: paisData, error: paisError } = await readPais(id);
       if (paisError) {
         alert("Error al cargar el país");
@@ -23,15 +21,13 @@ const ModificarPais = () => {
         setPais(paisData[0]);
       }
 
-      // Cargar las personas para el select
       const { data: personasData, error: personasError } = await obtenerPersonasIDNombre();
       if (personasError) {
         console.error("Error al cargar las personas:", personasError);
         alert("Hubo un problema al cargar las personas.");
       } else {
-        setPersonas(personasData); // Guardamos las personas
+        setPersonas(personasData);
       }
-      
       setCargando(false);
     };
 
@@ -74,7 +70,7 @@ const ModificarPais = () => {
             required
           />
           <select
-            name="presidenteID"
+            name="presidenteid"
             value={pais.presidenteid || ""}
             onChange={handleChange}
             required
@@ -86,9 +82,14 @@ const ModificarPais = () => {
               </option>
             ))}
           </select>
-          <button type="submit" disabled={actualizando}>
-            {actualizando ? "Actualizando..." : "Actualizar País"}
-          </button>
+          <div className="form-buttons-container">
+            <button type="submit" disabled={actualizando} className="form-button create-button">
+              {actualizando ? "Actualizando..." : "Actualizar País"}
+            </button>
+            <button type="button" onClick={() => navegar("/paises")} className="form-button cancel-button red-button">
+              Cancelar
+            </button>
+          </div>
         </form>
       )}
     </div>
