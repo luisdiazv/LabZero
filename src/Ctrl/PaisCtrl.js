@@ -3,8 +3,6 @@ import { supabase } from "../API/supabaseAPI";
 export const readAllPais = async () => {
   try {
     const { data, error } = await supabase.from("pais").select("*").order("id_pais");
-
-    console.log(data);
     
     if (error) {
       console.error("Error al obtener países:", error);
