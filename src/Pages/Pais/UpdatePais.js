@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { readPais, updatePais } from "../../Ctrl/PaisCtrl";
-import { obtenerPersonasIDNombre } from "../../Ctrl/PersonaCtrl";
+import { getPersona_IDNombre } from "../../Ctrl/PersonaCtrl";
 
 const ModificarPais = () => {
   const { id } = useParams();
@@ -21,7 +21,7 @@ const ModificarPais = () => {
         setPais(paisData[0]);
       }
 
-      const { data: personasData, error: personasError } = await obtenerPersonasIDNombre();
+      const { data: personasData, error: personasError } = await getPersona_IDNombre();
       if (personasError) {
         console.error("Error al cargar las personas:", personasError);
         alert("Hubo un problema al cargar las personas.");

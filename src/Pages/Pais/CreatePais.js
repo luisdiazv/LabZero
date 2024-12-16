@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"; 
 import { useNavigate } from "react-router-dom";
 import { createPais } from "../../Ctrl/PaisCtrl";  
-import { obtenerPersonasIDNombre } from "../../Ctrl/PersonaCtrl";  
+import { getPersona_IDNombre } from "../../Ctrl/PersonaCtrl";  
 
 const CrearPais = () => {
   const [pais, setPais] = useState({
@@ -15,7 +15,7 @@ const CrearPais = () => {
   useEffect(() => {
     const cargarPersonas = async () => {
       try {
-        const { data, error } = await obtenerPersonasIDNombre();
+        const { data, error } = await getPersona_IDNombre();
         if (error) {
           console.error("Error al cargar las personas:", error);
           alert("Hubo un problema al cargar las personas.");

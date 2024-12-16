@@ -51,7 +51,7 @@ const Personas = () => {
   }, []);
 
   const eliminarPersona = async (id) => {
-    if (window.confirm("¿Estás seguro de que deseas eliminar esta persona?")) {
+    if (window.confirm("¿Estás seguro de que deseas eliminar esta persona?\n\nEsto eliminará cualquier registro de la persona en Propiedad de vivienda y Residencia.\n\nEsto modificará los registros de la persona si es presidente de pais, gobernador de departamento, alcalde de municipio o cabeza de familia de otra persona.")) {
       try {
         setEliminando((prev) => ({ ...prev, [id]: true }));
         const { error } = await deletePersona(id);
