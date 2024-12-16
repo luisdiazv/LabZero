@@ -101,6 +101,7 @@ const Personas = () => {
           personas.map((persona) => (
             <div className="info-card" key={persona.id_persona}>
               <h2>{persona.nombre}</h2>
+              <p><strong>Persona ID: </strong> {persona.id_persona}</p>
               {/*<p><strong>Documento Identidad:</strong> {persona.documentoidentidad}</p>*/}
               <p><strong>Teléfono:</strong> {persona.telefono}</p>
               <p><strong>Edad:</strong> {persona.edad}</p>

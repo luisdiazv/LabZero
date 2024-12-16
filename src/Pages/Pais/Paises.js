@@ -2,32 +2,53 @@ import "../Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { readAllPais, deletePais } from "../../Ctrl/PaisCtrl"; 
+import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 
 const Paises = () => {
   const [paises, setPaises] = useState([]);
+  const [personas, setPersonas] = useState({});
   const [cargando, setCargando] = useState(true);
   const navegar = useNavigate();
 
   useEffect(() => {
-    const cargarPaises = async () => {
+    const cargarDatos = async () => {
       try {
         setCargando(true);
-        const { data, error } = await readAllPais();
-        if (error) {
-          console.error("Error al obtener países:", error);
+
+        // Cargar países
+        const { data: paisesData, error: errorPaises } = await readAllPais();
+        if (errorPaises) {
+          console.error("Error al obtener países:", errorPaises);
           alert("Hubo un problema al cargar los países.");
-        } else {
-          setPaises(data);
+          return;
         }
+
+        // Cargar personas
+        const { data: personasData, error: errorPersonas } = await readAllPersona();
+        if (errorPersonas) {
+          console.error("Error al obtener personas:", errorPersonas);
+          alert("Hubo un problema al cargar las personas.");
+          return;
+        }
+
+        // Transformar las personas en un diccionario para acceso rápido
+        const personasDict = personasData.reduce((acc, persona) => {
+          acc[persona.id_persona] = persona.nombre;
+          return acc;
+        }, {});
+
+        // Actualizar estados
+        setPaises(paisesData);
+        setPersonas(personasDict);
       } catch (err) {
         console.error("Error inesperado:", err);
-        alert("Hubo un error al cargar los países.");
+        alert("Hubo un error al cargar los datos.");
       } finally {
         setCargando(false);
       }
     };
 
-    cargarPaises();
+    cargarDatos();
   }, []);
 
   return (
@@ -61,7 +82,11 @@ const Paises = () => {
           paises.map((pais) => (
             <div className="info-card" key={pais.id_pais}>
               <h2>{pais.nombre}</h2>
-              <p><strong>Presidente:</strong> {pais.presidente}</p>
+              <p><strong>Pais ID: </strong> {pais.id_pais}</p>
+              <p>
+                <strong>Presidente:</strong>{" "}
+                {personas[pais.presidenteid] || "Desconocido"} (ID: {pais.presidenteid})
+              </p>
 
               <div className="info-buttons">
                 <button className="modificar-btn" onClick={() => navegar(`/paises/modificar-pais/${pais.id_pais}`)}>
