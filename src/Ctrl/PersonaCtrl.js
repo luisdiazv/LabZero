@@ -1,8 +1,8 @@
-import { supabase } from "../API/supabaseAPI";
+import { restAPI } from "../API/postgRestAPI";
 
 export const readAllPersona = async () => {
   try {
-    const { data, error } = await supabase.from("persona").select("*").order("id_persona");
+    const { data, error } = await restAPI.from("persona").select("*").order("id_persona");
 
     if (error) {
       console.error("Error al obtener personas:", error);
@@ -17,7 +17,7 @@ export const readAllPersona = async () => {
 
 export const readPersona = async (id) => {
   try {
-    const { data, error } = await supabase.from("persona").select("*").eq("id_persona", id);
+    const { data, error } = await restAPI.from("persona").select("*").eq("id_persona", id);
     if (error) {
       console.error("Error al obtener personas:", error);
       return { data: [], error };
@@ -35,10 +35,10 @@ export const deletePersona = async (id) => {
     console.warn(`Iniciando transacción para la persona con ID ${id}`);
 
     const transaccion = [
-      supabase.from("pais").update({ presidenteid: null }).eq("presidenteid", id),
-      supabase.from("departamento").update({ gobernadorid: null }).eq("gobernadorid", id),
-      supabase.from("municipio").update({ alcaldeid: null }).eq("alcaldeid", id),
-      supabase.from("persona").update({ cabezafamilia: null }).eq("cabezafamilia", id),
+      restAPI.from("pais").update({ presidenteid: null }).eq("presidenteid", id),
+      restAPI.from("departamento").update({ gobernadorid: null }).eq("gobernadorid", id),
+      restAPI.from("municipio").update({ alcaldeid: null }).eq("alcaldeid", id),
+      restAPI.from("persona").update({ cabezafamilia: null }).eq("cabezafamilia", id),
     ];
 
     const resultadoTransaccion = await Promise.all(transaccion);
@@ -51,7 +51,7 @@ export const deletePersona = async (id) => {
       }
     }
 
-    const { error: errorTransaccionPersonaVivienda } = await supabase.from("persona_vivienda").delete().eq("propietariaid", id);
+    const { error: errorTransaccionPersonaVivienda } = await restAPI.from("persona_vivienda").delete().eq("propietariaid", id);
     if (errorTransaccionPersonaVivienda) {
       console.error(`Error detectado en la simulación de eliminación en Persona_Vivienda:`, errorTransaccionPersonaVivienda);
       return { data: [], error: `Simulación fallida en Persona_Vivienda` };
@@ -62,10 +62,10 @@ export const deletePersona = async (id) => {
 
     // Modifica las referencias en tablas con FK de persona que permitan null
     const definitiveUpdates = [
-      supabase.from("pais").update({ presidenteid: null }).eq("presidenteid", id),
-      supabase.from("departamento").update({ gobernadorid: null }).eq("gobernadorid", id),
-      supabase.from("municipio").update({ alcaldeid: null }).eq("alcaldeid", id),
-      supabase.from("persona").update({ cabezafamilia: null }).eq("cabezafamilia", id),
+      restAPI.from("pais").update({ presidenteid: null }).eq("presidenteid", id),
+      restAPI.from("departamento").update({ gobernadorid: null }).eq("gobernadorid", id),
+      restAPI.from("municipio").update({ alcaldeid: null }).eq("alcaldeid", id),
+      restAPI.from("persona").update({ cabezafamilia: null }).eq("cabezafamilia", id),
     ];
 
     const definitiveResults = await Promise.all(definitiveUpdates);
@@ -75,7 +75,7 @@ export const deletePersona = async (id) => {
     });
 
     // Elimina las referencias en tablas con FK de persona que permitan null
-    const { error: errorRefsDef } = await supabase.from("persona_vivienda").delete().eq("propietariaid", id);
+    const { error: errorRefsDef } = await restAPI.from("persona_vivienda").delete().eq("propietariaid", id);
 
     if (errorRefsDef) {
       console.error(`Error eliminando referencias definitivas en Persona_Vivienda:`, errorRefsDef);
@@ -83,7 +83,7 @@ export const deletePersona = async (id) => {
     }
 
     // Eliminar la persona
-    const { data, error } = await supabase.from("persona").delete().eq("id_persona", id);
+    const { data, error } = await restAPI.from("persona").delete().eq("id_persona", id);
 
     if (error) {
       console.error(`Error al eliminar persona con ID ${id}:`, error);
@@ -104,7 +104,7 @@ export const createPersona = async (persona) => {
   try {
     if (persona.cabezafamilia) {
       // Validar que la persona asignada como cabezafamilia no sea ya un cabezafamilia
-      const { data: existingHead, error: validationError } = await supabase.from("persona").select("id_persona").eq("cabezafamilia", persona.cabezafamilia);
+      const { data: existingHead, error: validationError } = await restAPI.from("persona").select("id_persona").eq("cabezafamilia", persona.cabezafamilia);
 
       if (validationError) {
         console.error("Error validando cabezafamilia:", validationError);
@@ -120,7 +120,7 @@ export const createPersona = async (persona) => {
     }
 
     // Si la validación pasa, insertar la persona
-    const { data, error } = await supabase.from("persona").insert(persona);
+    const { data, error } = await restAPI.from("persona").insert(persona);
 
     if (error) {
       console.error("Error al crear persona:", error);
@@ -138,7 +138,7 @@ export const updatePersona = async (id, updates) => {
   try {
     if (updates.cabezafamilia) {
       // Validar que la persona asignada como cabezafamilia no sea ya un cabezafamilia
-      const { data: existingHead, error: validationError } = await supabase
+      const { data: existingHead, error: validationError } = await restAPI
         .from("persona")
         .select("id_persona")
         .eq("cabezafamilia", updates.cabezafamilia);
@@ -157,7 +157,7 @@ export const updatePersona = async (id, updates) => {
     }
 
     // Si la validación pasa, actualizar la persona
-    const { data, error } = await supabase.from("persona").update(updates).eq("id_persona", id);
+    const { data, error } = await restAPI.from("persona").update(updates).eq("id_persona", id);
 
     if (error) {
       console.error(`Error al modificar persona con ID ${id}:`, error);
@@ -173,7 +173,7 @@ export const updatePersona = async (id, updates) => {
 
 export const getPersona_IDNombre = async () => {
   try {
-    const { data, error } = await supabase.from("persona").select("id_persona, nombre").order("id_persona");
+    const { data, error } = await restAPI.from("persona").select("id_persona, nombre").order("id_persona");
 
     if (error) {
       console.error("Error al obtener personas:", error);
