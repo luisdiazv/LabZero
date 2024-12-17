@@ -95,7 +95,7 @@ const CrearPais = () => {
             onClick={() => navegar("/paises")} 
             className="form-button cancel-button red-button"
           >
-            Cancelar
+            Cancelar y volver
           </button>
         </div>
       </form>

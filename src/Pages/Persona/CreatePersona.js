@@ -147,7 +147,7 @@ const CrearPersona = () => {
             onClick={() => navegar("/personas")}
             className="form-button cancel-button red-button"
           >
-            Cancelar
+            Cancelar y volver
           </button>
         </div>
       </form>

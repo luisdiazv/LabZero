@@ -178,7 +178,7 @@ const ModificarPersona = () => {
               {actualizando ? "Actualizando..." : "Actualizar"}
             </button>
             <button type="button" onClick={() => navegar("/paises")} className="form-button cancel-button red-button">
-              Cancelar
+              Cancelar y volver
             </button>
           </div>
         </form>
