@@ -1,98 +1,135 @@
-import { useState, useEffect } from "react"; 
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPais } from "../../Ctrl/PaisCtrl";  
-import { getPersona_IDNombre } from "../../Ctrl/PersonaCtrl";  
+import { createDepartamento } from "../../Ctrl/DepartamentoCtrl";
+import { readAllPais } from "../../Ctrl/PaisCtrl";
+import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 
-const CrearPais = () => {
-  const [pais, setPais] = useState({
-    nombre: "",         
-    presidenteid: "",   
+const CrearDepartamento = () => {
+  const [departamento, setDepartamento] = useState({
+    nombre: "",
+    idpais: "",
+    gobernadorid: "",
   });
-  const [personas, setPersonas] = useState([]);  
-  const [cargando, setCargando] = useState(false);  
-  const navegar = useNavigate();  
+  const [paises, setPaises] = useState([]);
+  const [gobernadores, setGobernadores] = useState([]);
+  const [cargando, setCargando] = useState(false);
+  const [nombreError, setNombreError] = useState("");
+  const navegar = useNavigate();
 
+  // Cargar los países y los posibles gobernadores
   useEffect(() => {
-    const cargarPersonas = async () => {
+    const cargarDatos = async () => {
       try {
-        const { data, error } = await getPersona_IDNombre();
-        if (error) {
-          console.error("Error al cargar las personas:", error);
-          alert("Hubo un problema al cargar las personas.");
+        // Cargar los países
+        const { data: paisesData, error: paisesError } = await readAllPais();
+        if (paisesError) {
+          console.error("Error al obtener países:", paisesError);
+          alert("Hubo un problema al cargar los países.");
         } else {
-          setPersonas(data);  
+          setPaises(paisesData);
+        }
+
+        // Cargar las personas que pueden ser gobernadores
+        const { data: personasData, error: personasError } = await readAllPersona();
+        if (personasError) {
+          console.error("Error al obtener personas:", personasError);
+          alert("Hubo un problema al cargar los gobernadores.");
+        } else {
+          setGobernadores(personasData);
         }
       } catch (err) {
-        console.error("Error inesperado:", err);
-        alert("Hubo un error inesperado.");
+        console.error("Error inesperado al cargar los datos:", err);
+        alert("Hubo un error inesperado al cargar los datos.");
       }
     };
-    cargarPersonas();
-  }, []);  
+
+    cargarDatos();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPais({
-      ...pais,
-      [name]: value,  
-    });
+    setDepartamento({ ...departamento, [name]: value });
+
+    // Validación de nombre de departamento
+    if (name === "nombre" && value.trim().length < 3) {
+      setNombreError("El nombre del departamento debe tener al menos 3 caracteres.");
+    } else {
+      setNombreError("");
+    }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();  
+    e.preventDefault();
 
-    setCargando(true);  
+    // Validación de nombre del departamento
+    if (nombreError || departamento.nombre.trim().length < 3) {
+      setNombreError("El nombre del departamento debe tener al menos 3 caracteres.");
+      return;
+    }
 
+    setCargando(true);
     try {
-      const { error } = await createPais(pais);
+      const { error } = await createDepartamento(departamento);
       if (error) {
-        alert("Error al crear el país.");
+        console.error("Error al crear departamento:", error);
+        alert("Hubo un error al crear el departamento.");
       } else {
-        alert("País creado exitosamente.");
-        navegar("/paises");  
+        alert("Departamento creado exitosamente.");
+        navegar("/departamentos");
       }
     } catch (err) {
-      console.error("Error al crear el país:", err);
-      alert("Hubo un error al crear el país.");
+      console.error("Error inesperado al crear el departamento:", err);
+      alert("Hubo un error inesperado al crear el departamento.");
     } finally {
-      setCargando(false);  
+      setCargando(false);
     }
   };
 
   return (
     <div className="container">
-      <h1>Crear País</h1>
+      <h1>Crear Departamento</h1>
       <form onSubmit={handleSubmit}>
         <input
           type="text"
           name="nombre"
-          placeholder="Nombre del País"
-          value={pais.nombre}
+          placeholder="Nombre del Departamento"
+          value={departamento.nombre}
           onChange={handleChange}
           required
         />
-        
-        <select
-          name="presidenteid"
-          value={pais.presidenteid}
-          onChange={handleChange}
-          required
-        >
-          <option value="" disabled>Selecciona un presidente</option>
-          {personas.map((persona) => (
-            <option key={persona.id} value={persona.id}>
-              {persona.nombre} (ID: {persona.id})
-            </option>
-          ))}
-        </select>
+        {nombreError && <p style={{ color: "red" }}>{nombreError}</p>}
 
-        <div className="form-buttons-container">
-          <button type="submit" disabled={cargando} className="form-button create-button">
-            {cargando ? "Creando..." : "Crear País"}
+        <select name="idpais" value={departamento.idpais} onChange={handleChange} required>
+  <option value="">Seleccione el País</option>
+  {paises.map((pais) => (
+    <option key={pais.id_pais} value={pais.id_pais}>
+      {pais.nombre} {/* Aquí solo se muestra el nombre */}
+    </option>
+  ))}
+</select>
+
+<select
+  name="gobernadorid"
+  value={departamento.gobernadorid}
+  onChange={handleChange}
+>
+  <option value="">Seleccionar Gobernador (opcional)</option>
+  {gobernadores.map((persona) => (
+    <option key={persona.id_persona} value={persona.id_persona}>
+      {persona.nombre} {/* Aquí solo se muestra el nombre */}
+    </option>
+  ))}
+</select>
+
+
+        {/* Botones en la misma línea */}
+        <div className="form-buttons">
+          <button type="submit" disabled={cargando} className="form-button form-button-small">
+            {cargando ? "Creando..." : "Crear"}
           </button>
-          <button 
-            type="button" 
-            onClick={() => navegar("/paises")} 
+          <button
+            type="button"
+            onClick={() => navegar("/departamentos")}
             className="form-button cancel-button red-button"
           >
             Cancelar y volver
@@ -103,4 +140,4 @@ const CrearPais = () => {
   );
 };
 
-export default CrearPais;
+export default CrearDepartamento;

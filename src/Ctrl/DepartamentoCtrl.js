@@ -37,7 +37,7 @@ export const deleteDepartamento = async (id) => {
             console.error(`Error eliminando referencias definitivas en Municipio:`, errorRefsDef);
             return { data: [], error: errorRefsDef };
         }
-        const { data, error } = await supabase.from("departamento").delete().eq("id_departamento", id);
+        const { data, error } = await restAPI.from("departamento").delete().eq("id_departamento", id);
         if (error) {
             console.error(`Error al eliminar departamento con ID ${id}: `, error);
             return { data: [], error };
