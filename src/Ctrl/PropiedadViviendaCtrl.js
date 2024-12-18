@@ -93,26 +93,3 @@ export const tienePropietaria = async (id_vivienda) => {
     return { data: false, error: err };  // Retorna 'false' en caso de error inesperado.
   }
 };
-
-/*
-export const getPersona_IDNombre = async () => {
-  try {
-    const { data, error } = await restAPI.from("persona").select("id_persona, nombre").order("id_persona");
-
-    if (error) {
-      console.error("Error al obtener personas:", error);
-      return { data: [], error };
-    }
-
-    const personas = data.map(persona => ({
-      id: persona.id_persona,
-      nombre: persona.nombre
-    }));
-
-    return { data: personas, error: null };
-  } catch (err) {
-    console.error("Error inesperado al obtener personas:", err);
-    return { data: [], error: err };
-  }
-};
-*/
