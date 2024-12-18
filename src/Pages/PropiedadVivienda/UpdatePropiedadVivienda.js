@@ -132,7 +132,7 @@ const ModificarPropiedadVivienda = () => {
           </button>
           <button
             type="button"
-            onClick={() => navegar("/propiedades-vivienda")}
+            onClick={() => navegar("/propiedad-vivienda")}
             className="form-button cancel-button red-button"
           >
             Cancelar y volver

@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import "./Comun.css";
+
 
 const Home = () => {
-
-  const navegar = useNavigate();
 
   return (
     <div className="container">

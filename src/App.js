@@ -27,82 +27,86 @@ function App() {
   const navegar = useNavigate();
   const location = useLocation();
 
+  // Verifica si estamos en una de las páginas de creación o modificación
+  const isCrearOActualizar = location.pathname.includes('/crear-') || location.pathname.includes('/modificar-');
+
   return (
     <div className='App'>
-      <div className="NavBar">
-
-        <div className="button-container text-center">
-          <h1>Lab 0</h1>
-          <button
-            id="Inicio"
-            onClick={() => navegar("/")}
-            className={location.pathname === "/" ? "active-button" : ""}
-          > Inicio
-          </button>
-          <button
-            id="Personas"
-            onClick={() => navegar("/personas/")}
-            className={location.pathname === "/personas/" ? "active-button" : ""}
-          >
-            Personas
-          </button>
-          <button
-            id="Vivienda"
-            onClick={() => navegar("/viviendas/")}
-            className={location.pathname === "/viviendas/" ? "active-button" : ""}
-          >
-            Vivienda
-          </button>
-
-          <button
-            id="Propiedad-Vivienda"
-            onClick={() => navegar("/propiedad-vivienda/")}
-            className={location.pathname === "/propiedad-vivienda/" ? "active-button" : ""}
-          >
-            Propiedad de Vivienda
-          </button>
-          <button
-            id="Municipios"
-            onClick={() => navegar("/municipios/")}
-            className={location.pathname === "/municipios/" ? "active-button" : ""}
-          >
-            Municipios
-          </button>
-          <button
-            id="Departamentos"
-            onClick={() => navegar("/departamentos/")}
-            className={location.pathname === "/departamentos/" ? "active-button" : ""}
-          >
-            Departamentos
-          </button>
-          <button
-            id="Paises"
-            onClick={() => navegar("/paises/")}
-            className={location.pathname === "/paises/" ? "active-button" : ""}
-          >
-            Paises
-          </button>
+      {/* Solo muestra la barra de navegación si no estamos en una página de creación o modificación */}
+      {!isCrearOActualizar && (
+        <div className="NavBar">
+          <div className="button-container text-center">
+            <h1>Lab 0</h1>
+            <button
+              id="Inicio"
+              onClick={() => navegar("/")}
+              className={location.pathname === "/" ? "active-button" : ""}
+            > Inicio
+            </button>
+            <button
+              id="Personas"
+              onClick={() => navegar("/personas")}
+              className={location.pathname === "/personas" ? "active-button" : ""}
+            >
+              Personas
+            </button>
+            <button
+              id="Vivienda"
+              onClick={() => navegar("/viviendas")}
+              className={location.pathname === "/viviendas" ? "active-button" : ""}
+            >
+              Vivienda
+            </button>
+            <button
+              id="Propiedad-Vivienda"
+              onClick={() => navegar("/propiedad-vivienda")}
+              className={location.pathname === "/propiedad-vivienda" ? "active-button" : ""}
+            >
+              Propiedad de Vivienda
+            </button>
+            <button
+              id="Municipios"
+              onClick={() => navegar("/municipios")}
+              className={location.pathname === "/municipios" ? "active-button" : ""}
+            >
+              Municipios
+            </button>
+            <button
+              id="Departamentos"
+              onClick={() => navegar("/departamentos")}
+              className={location.pathname === "/departamentos" ? "active-button" : ""}
+            >
+              Departamentos
+            </button>
+            <button
+              id="Paises"
+              onClick={() => navegar("/paises")}
+              className={location.pathname === "/paises" ? "active-button" : ""}
+            >
+              Paises
+            </button>
+          </div>
         </div>
-      </div>
+      )}
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/personas/" element={<Personas />} />
-        <Route path="/personas/crear-persona/" element={<CrearPersona />} />
+        <Route path="/personas" element={<Personas />} />
+        <Route path="/personas/crear-persona" element={<CrearPersona />} />
         <Route path="/personas/modificar-persona/:id" element={<ModificarPersona />} />
         <Route path="/paises/" element={<Paises />} />
-        <Route path="/paises/crear-pais/" element={<CrearPais />} />
+        <Route path="/paises/crear-pais" element={<CrearPais />} />
         <Route path="/paises/modificar-pais/:id" element={<ModificarPais />} />
-        <Route path="/departamentos/" element={<Departamentos />} />
-        <Route path="/departamentos/crear-departamento/" element={<CrearDepartamento />} />
+        <Route path="/departamentos" element={<Departamentos />} />
+        <Route path="/departamentos/crear-departamento" element={<CrearDepartamento />} />
         <Route path="/departamentos/modificar-departamento/:id" element={<ModificarDepartamento />} />
-        <Route path="/municipios/" element={<Municipios />} />
-        <Route path="/municipios/crear-municipio/" element={<CrearMunicipio />} />
+        <Route path="/municipios" element={<Municipios />} />
+        <Route path="/municipios/crear-municipio" element={<CrearMunicipio />} />
         <Route path="/municipios/modificar-municipio/:id" element={<ModificarMunicipio />} />
-        <Route path="/viviendas/" element={<Viviendas />} />
-        <Route path="/viviendas/crear-vivienda/" element={<CrearVivienda />} />
+        <Route path="/viviendas" element={<Viviendas />} />
+        <Route path="/viviendas/crear-vivienda" element={<CrearVivienda />} />
         <Route path="/viviendas/modificar-vivienda/:id" element={<ModificarVivienda />} />
-        <Route path="/propiedad-vivienda/" element={<PropiedadVivienda />} />
-        <Route path="/propiedad-vivienda/crear-propiedad-vivienda/" element={<CrearPropiedadVivienda />} />
+        <Route path="/propiedad-vivienda" element={<PropiedadVivienda />} />
+        <Route path="/propiedad-vivienda/crear-propiedad-vivienda" element={<CrearPropiedadVivienda />} />
         <Route path="/propiedad-vivienda/modificar-propiedad-vivienda/:id" element={<ModificarPropiedadVivienda />} />
       </Routes>
     </div>
