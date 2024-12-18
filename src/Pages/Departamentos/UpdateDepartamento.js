@@ -2,12 +2,18 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { readDepartamento, updateDepartamento } from "../../Ctrl/DepartamentoCtrl";
 import { readAllPais } from "../../Ctrl/PaisCtrl";
+import { readAllPersona } from "../../Ctrl/PersonaCtrl"; // Usamos este controlador para las personas
 import "../Comun.css";
 
 const ModificarDepartamento = () => {
   const { id } = useParams();
-  const [departamento, setDepartamento] = useState(null);
+  const [departamento, setDepartamento] = useState({
+    nombre: "",
+    paisid: "",
+    gobernadorid: "", // Aseguramos que este valor esté inicializado
+  });
   const [paises, setPaises] = useState([]);
+  const [personas, setPersonas] = useState([]); // Lista de personas disponibles
   const [cargando, setCargando] = useState(true);
   const [actualizando, setActualizando] = useState(false);
   const [nombreError, setNombreError] = useState("");
@@ -18,12 +24,17 @@ const ModificarDepartamento = () => {
     const cargarDepartamento = async () => {
       try {
         const { data, error } = await readDepartamento(id);
-        if (error) {
+        if (error || !data || data.length === 0) {
           console.error("Error al cargar departamento:", error);
           alert("Hubo un problema al cargar los datos del departamento.");
           navegar("/departamentos");
         } else {
-          setDepartamento(data[0]);
+          const dep = data[0];
+          setDepartamento({
+            nombre: dep.nombre || "",
+            paisid: dep.paisid || "",
+            gobernadorid: dep.gobernadorid || "", // Aseguramos que gobernadorid se setee correctamente
+          });
         }
       } catch (err) {
         console.error("Error inesperado:", err);
@@ -49,8 +60,24 @@ const ModificarDepartamento = () => {
       }
     };
 
+    const cargarPersonas = async () => {
+      try {
+        const { data, error } = await readAllPersona();
+        if (error) {
+          console.error("Error al obtener personas:", error);
+          alert("Hubo un problema al cargar las personas.");
+        } else {
+          setPersonas(data);
+        }
+      } catch (err) {
+        console.error("Error inesperado:", err);
+        alert("Hubo un error al cargar las personas.");
+      }
+    };
+
     cargarDepartamento();
     cargarPaises();
+    cargarPersonas();
   }, [id, navegar]);
 
   const handleChange = (e) => {
@@ -73,29 +100,30 @@ const ModificarDepartamento = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (nombreError || departamento.nombre.trim() === "") {
+    if (!departamento.nombre || departamento.nombre.trim() === "") {
       setNombreError("El nombre del departamento es obligatorio.");
-      return; // No continuar si hay un error en el nombre
+      return;
     }
 
-    if (gobernadorError || departamento.gobernadoid.trim() === "") {
+    const gobernadorid = departamento.gobernadorid || "";
+    if (typeof gobernadorid !== "string" || gobernadorid.trim() === "") {
       setGobernadorError("El gobernador del departamento es obligatorio.");
-      return; // No continuar si hay un error en el gobernador
+      return;
     }
 
     setActualizando(true);
     try {
       const { error } = await updateDepartamento(id, departamento);
       if (error) {
-        console.error("Error al modificar departamento:", error);
-        alert("Hubo un problema al modificar el departamento.");
+        console.error("Error al actualizar departamento:", error);
+        alert("Hubo un problema al actualizar el departamento.");
       } else {
-        alert("Departamento modificado exitosamente.");
+        alert("Departamento actualizado exitosamente.");
         navegar("/departamentos");
       }
     } catch (err) {
-      console.error("Error inesperado:", err);
-      alert("Hubo un error inesperado al modificar el departamento.");
+      console.error("Error inesperado al actualizar departamento:", err);
+      alert("Hubo un error inesperado al actualizar el departamento.");
     } finally {
       setActualizando(false);
     }
@@ -122,8 +150,8 @@ const ModificarDepartamento = () => {
           {nombreError && <p className="error-message">{nombreError}</p>}
 
           <select
-            name="id_pais"
-            value={departamento.id_pais}
+            name="paisid"
+            value={departamento.paisid}
             onChange={handleChange}
             required
             className="form-select"
@@ -144,12 +172,14 @@ const ModificarDepartamento = () => {
             className="form-select"
           >
             <option value="">Seleccionar Gobernador</option>
-            {/* Se puede llenar con datos de personas que son gobernadores */}
-            {/* Para este ejemplo se deja un valor predeterminado de Gobernador ID */}
+            {personas.map((persona) => (
+              <option key={persona.id_persona} value={persona.id_persona}>
+                {persona.nombre} (ID: {persona.id_persona})
+              </option>
+            ))}
           </select>
           {gobernadorError && <p className="error-message">{gobernadorError}</p>}
 
-          {/* Botones en la misma línea */}
           <div className="form-buttons">
             <button
               type="submit"

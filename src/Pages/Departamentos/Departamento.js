@@ -1,7 +1,9 @@
 import "../Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { readAllDepartamento, deleteDepartamento, readDepartamento } from "../../Ctrl/DepartamentoCtrl";
+import { readAllDepartamento, deleteDepartamento } from "../../Ctrl/DepartamentoCtrl";
+import { readAllPais } from "../../Ctrl/PaisCtrl"; // Debes usar este controlador para los países
+import { readAllPersona } from "../../Ctrl/PersonaCtrl"; // Debes usar este controlador para los gobernadores
 
 const Departamentos = () => {
   const [departamentos, setDepartamentos] = useState([]);
@@ -22,16 +24,12 @@ const Departamentos = () => {
         } else {
           setDepartamentos(data);
 
-          // Extraer todos los IDs de países y gobernadores en una sola pasada
-          const idsPaises = [...new Set(data.map((departamento) => departamento.paisid))];
-          const idsGobernadores = [...new Set(data.map((departamento) => departamento.gobernadorid))];
-
           // Cargar todos los países y gobernadores de una sola vez
           const [paisesResponse, gobernadoresResponse] = await Promise.all([
             // Cargar nombres de países
-            readDepartamento(idsPaises.join(','), 'pais'),
+            readAllPais(),
             // Cargar nombres de gobernadores
-            readDepartamento(idsGobernadores.join(','), 'persona')
+            readAllPersona()
           ]);
 
           const paises = {};
@@ -40,14 +38,14 @@ const Departamentos = () => {
           // Procesar la respuesta de países
           if (paisesResponse?.data) {
             paisesResponse.data.forEach((pais) => {
-              paises[pais.paisid] = pais.nombre;
+              paises[pais.id_pais] = pais.nombre; // Asegúrate de usar el ID correcto de país
             });
           }
 
           // Procesar la respuesta de gobernadores
           if (gobernadoresResponse?.data) {
             gobernadoresResponse.data.forEach((persona) => {
-              gobernadores[persona.id_persona] = persona.nombre;
+              gobernadores[persona.id_persona] = persona.nombre; // Usar el id_persona si es necesario
             });
           }
 
@@ -124,7 +122,7 @@ const Departamentos = () => {
             <div className="info-card" key={departamento.id_departamento}>
               <h2>{departamento.nombre}</h2>
               <p><strong>Departamento ID: </strong> {departamento.id_departamento}</p>
-              <p><strong>País: </strong> {nombresPais[departamento.paisid]}</p>
+              <p><strong>País: </strong> {nombresPais[departamento.paisid] || "No asignado"}</p>
               <p><strong>Gobernador: </strong> {nombresGobernador[departamento.gobernadorid] || "No asignado"}</p>
 
               <div className="info-buttons">

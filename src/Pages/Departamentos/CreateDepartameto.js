@@ -16,25 +16,26 @@ const CrearDepartamento = () => {
   const [nombreError, setNombreError] = useState("");
   const navegar = useNavigate();
 
-  // Cargar los países y los posibles gobernadores
   useEffect(() => {
     const cargarDatos = async () => {
       try {
         // Cargar los países
         const { data: paisesData, error: paisesError } = await readAllPais();
-        if (paisesError) {
-          console.error("Error al obtener países:", paisesError);
+        if (paisesError || !Array.isArray(paisesData)) {
+          console.error("Error al obtener países:", paisesError || paisesData);
           alert("Hubo un problema al cargar los países.");
         } else {
+          console.log("Países recibidos:", paisesData); // Verifica los datos recibidos
           setPaises(paisesData);
         }
 
         // Cargar las personas que pueden ser gobernadores
         const { data: personasData, error: personasError } = await readAllPersona();
-        if (personasError) {
-          console.error("Error al obtener personas:", personasError);
+        if (personasError || !Array.isArray(personasData)) {
+          console.error("Error al obtener personas:", personasError || personasData);
           alert("Hubo un problema al cargar los gobernadores.");
         } else {
+          console.log("Personas recibidas:", personasData); // Verifica los datos recibidos
           setGobernadores(personasData);
         }
       } catch (err) {
@@ -102,8 +103,8 @@ const CrearDepartamento = () => {
         <select name="paisid" value={departamento.paisid} onChange={handleChange} required>
           <option value="">Seleccione el País</option>
           {paises.map((pais) => (
-            <option key={pais.paisid} value={pais.paisid}>
-              {pais.nombre} (ID: {pais.paisid})
+            <option key={pais.id_pais} value={pais.id_pais}>
+              {pais.nombre} (ID: {pais.id_pais})
             </option>
           ))}
         </select>
@@ -121,7 +122,6 @@ const CrearDepartamento = () => {
           ))}
         </select>
 
-        {/* Botones en la misma línea */}
         <div className="form-buttons">
           <button type="submit" disabled={cargando} className="form-button form-button-small">
             {cargando ? "Creando..." : "Crear"}
