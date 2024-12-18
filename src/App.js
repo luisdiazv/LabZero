@@ -9,6 +9,9 @@ import ModificarPersona from './Pages/Persona/UpdatePersona';
 import Paises from './Pages/Pais/Paises'; 
 import CrearPais from './Pages/Pais/CreatePais';
 import ModificarPais from './Pages/Pais/UpdatePais';
+import Municipios from './Pages/Municipio/Municipios';
+import CrearMunicipio from './Pages/Municipio/CreateMunicipio';
+import ModificarMunicipio from './Pages/Municipio/UpdateMunicipio';
 
 function App() {
   return (
@@ -21,6 +24,9 @@ function App() {
         <Route path="/paises/" element={<Paises />} />
         <Route path="/paises/crear-pais" element={<CrearPais />} />
         <Route path="/paises/modificar-pais/:id" element={<ModificarPais />} />
+        <Route path="/municipios/" element={<Municipios />} />
+        <Route path="/municipios/crear-municipio" element={<CrearMunicipio />} />
+        <Route path="/municipios/modificar-municipio/:id" element={<ModificarMunicipio />} />
       </Routes>
     </div>
   );
