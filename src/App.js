@@ -15,7 +15,9 @@ import ModificarDepartamento from './Pages/Departamentos/UpdateDepartamento';
 import Municipios from './Pages/Municipio/Municipios';
 import CrearMunicipio from './Pages/Municipio/CreateMunicipio';
 import ModificarMunicipio from './Pages/Municipio/UpdateMunicipio';
+import Viviendas from './Pages/Vivienda/Vivienda';
 import CrearVivienda from './Pages/Vivienda/CreateVivienda';
+import ModificarVivienda from './Pages/Vivienda/UpdateVivienda';
 
 function App() {
   return (
@@ -34,7 +36,9 @@ function App() {
         <Route path="/municipios/" element={<Municipios />} />
         <Route path="/municipios/crear-municipio" element={<CrearMunicipio />} />
         <Route path="/municipios/modificar-municipio/:id" element={<ModificarMunicipio />} />
-        <Route path="/viviendas/crear-vivienda" element={<CrearVivienda />} />
+        <Route path="/viviendas/" element={<Viviendas />} />
+        <Route path="/viviendas/crear-vivienda/" element={<CrearVivienda />} />
+        <Route path="/viviendas/modificar-vivienda/:id" element={<ModificarVivienda />} />
       </Routes>
     </div>
   );

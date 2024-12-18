@@ -2,10 +2,12 @@ import "../Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { readAllVivienda, deleteVivienda, readVivienda } from "../../Ctrl/ViviendaCtrl";
+import { readMunicipio } from "../../Ctrl/MunicipioCtrl"; // Asegúrate de tener este controlador
 
 const Viviendas = () => {
     const [viviendas, setViviendas] = useState([]);
     const [direcciones, setDirecciones] = useState({});
+    const [municipios, setMunicipios] = useState({}); // Estado para los municipios
     const [cargando, setCargando] = useState(true);
     const [eliminando, setEliminando] = useState({});
     const navegar = useNavigate();
@@ -22,8 +24,12 @@ const Viviendas = () => {
                     setViviendas(data);
 
                     const idsDirecciones = data.map((vivienda) => vivienda.id_vivienda);
+                    const idsMunicipios = data.map((vivienda) => vivienda.municipioid); // Obtener todos los IDs de municipio
 
                     const direccionesData = {};
+                    const municipiosData = {};
+
+                    // Cargar direcciones
                     await Promise.all(
                         idsDirecciones.map(async (id) => {
                             const { data: viviendaData, error: errorVivienda } = await readVivienda(id);
@@ -34,7 +40,21 @@ const Viviendas = () => {
                             }
                         })
                     );
+
+                    // Cargar municipios por ID
+                    await Promise.all(
+                        idsMunicipios.map(async (municipioId) => {
+                            const { data: municipioData, error: errorMunicipio } = await readMunicipio(municipioId);
+                            if (errorMunicipio) {
+                                console.error(`Error al obtener municipio con ID ${municipioId}:`, errorMunicipio);
+                            } else if (municipioData && municipioData.length > 0) {
+                                municipiosData[municipioId] = municipioData[0].nombre;
+                            }
+                        })
+                    );
+
                     setDirecciones(direccionesData);
+                    setMunicipios(municipiosData); // Setear municipios con sus nombres
                 }
             } catch (err) {
                 console.error("Error inesperado:", err);
@@ -100,15 +120,11 @@ const Viviendas = () => {
                 ) : viviendas.length > 0 ? (
                     viviendas.map((vivienda) => (
                         <div className="info-card" key={vivienda.id_vivienda}>
-                            <h2>{vivienda.direccion}</h2>
+                            <h2>{direcciones[vivienda.id_vivienda]}</h2>
                             <p><strong>Vivienda ID: </strong> {vivienda.id_vivienda}</p>
-                            <p><strong>Teléfono:</strong> {vivienda.telefono}</p>
-                            <p><strong>Precio:</strong> {vivienda.precio}</p>
-                            <p><strong>Propietario:</strong> {vivienda.propietario}</p>
-                            <p>
-                                <strong>Dirección:</strong>{" "}
-                                {direcciones[vivienda.id_vivienda] || "No disponible"}
-                            </p>
+                            <p><strong>Capacidad:</strong> {vivienda.capacidad}</p>
+                            <p><strong>Pisos:</strong> {vivienda.pisos}</p>
+                            <p><strong>Municipio:</strong> {municipios[vivienda.municipioid] || "Desconocido"}</p> {/* Mostrar nombre del municipio */}
 
                             <div className="info-buttons">
                                 <button className="modificar-btn" onClick={() => navegar(`/viviendas/modificar-vivienda/${vivienda.id_vivienda}`)}>
