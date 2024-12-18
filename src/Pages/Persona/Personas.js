@@ -74,7 +74,7 @@ const Personas = () => {
   return (
     <div className="container">
       <div className="header">
-        <h3>Aqui podras ver la información acerca de los departamentos.</h3>
+        <h3>Aqui podras ver la información acerca de las personas.</h3>
       </div>
 
       {!cargando && (

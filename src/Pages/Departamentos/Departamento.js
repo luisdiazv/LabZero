@@ -1,4 +1,3 @@
-import "../Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { readAllDepartamento, deleteDepartamento } from "../../Ctrl/DepartamentoCtrl";
