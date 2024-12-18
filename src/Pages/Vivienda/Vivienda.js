@@ -90,20 +90,10 @@ const Viviendas = () => {
 
     return (
         <div className="container">
-            <div className="header text-center">
-                <h1>CRUD</h1>
-                <h1>Viviendas</h1>
+            <div className="header">
+                <h3>Aqui podras ver la información acerca de las viviendas.</h3>
             </div>
 
-            <div className="button-container text-center">
-                <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
-                <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-                <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
-                <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
-                <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-                <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
-                <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
-            </div>
 
             {!cargando && (
                 <div className="text-center">
@@ -118,13 +108,16 @@ const Viviendas = () => {
                     <p>Cargando viviendas...</p>
                 ) : viviendas.length > 0 ? (
                     viviendas.map((vivienda) => (
-                        <div className="info-card" key={vivienda.id_vivienda}>
-                            <h2>{direcciones[vivienda.id_vivienda]}</h2>
-                            <p><strong>Vivienda ID: </strong> {vivienda.id_vivienda}</p>
-                            <p><strong>Capacidad:</strong> {vivienda.capacidad}</p>
-                            <p><strong>Pisos:</strong> {vivienda.pisos}</p>
-                            <p><strong>Municipio:</strong> {municipios[vivienda.municipioid] || "Desconocido"}</p> {/* Mostrar nombre del municipio */}
-
+                        <div className="info-container">
+                            <div className="info-card" key={vivienda.id_vivienda}>
+                                <h2>{direcciones[vivienda.id_vivienda]}</h2>
+                                <div className="info-card-container">
+                                    <p><strong>Vivienda ID: </strong> {vivienda.id_vivienda}</p>
+                                    <p><strong>Capacidad:</strong> {vivienda.capacidad}</p>
+                                    <p><strong>Pisos:</strong> {vivienda.pisos}</p>
+                                    <p><strong>Municipio:</strong> {municipios[vivienda.municipioid] || "Desconocido"}</p> {/* Mostrar nombre del municipio */}
+                                </div>
+                            </div>
                             <div className="info-buttons">
                                 <button className="modificar-btn" onClick={() => navegar(`/viviendas/modificar-vivienda/${vivienda.id_vivienda}`)}>
                                     Modificar

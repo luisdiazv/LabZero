@@ -93,19 +93,8 @@ const PropiedadVivienda = () => {
 
   return (
     <div className="container">
-      <div className="header text-center">
-        <h1>CRUD</h1>
-        <h1>Propiedades de Vivienda</h1>
-      </div>
-
-      <div className="button-container text-center">
-        <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
-        <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-        <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
-        <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
-        <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-        <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
-        <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
+      <div className="header">
+        <h3>Aqui podras ver la información acerca de las propiedades de las viviendas.</h3>
       </div>
 
       {!cargando && (
@@ -121,14 +110,17 @@ const PropiedadVivienda = () => {
           <p>Cargando propiedades de vivienda...</p>
         ) : propiedades.length > 0 ? (
           propiedades.map((propiedad) => (
-            <div className="info-card" key={propiedad.id_propiedad_vivienda}>
-              <h2>Propiedad ID: {propiedad.id_propiedad_vivienda}</h2>
-              <p><strong>Vivienda: </strong> {viviendas[propiedad.viviendaid] || "Desconocida"} (ID: {propiedad.viviendaid})</p>
-              <p>
-                <strong>Propietaria:</strong>{" "}
-                {personas[propiedad.propietariaid] || "Desconocido"} (ID: {propiedad.propietariaid})
-              </p>
-
+            <div className="info-container">
+              <div className="info-card" key={propiedad.id_propiedad_vivienda}>
+                <h2>Propiedad ID: {propiedad.id_propiedad_vivienda}</h2>
+                <div className="info-card-container">
+                  <p><strong>Vivienda: </strong> {viviendas[propiedad.viviendaid] || "Desconocida"} (ID: {propiedad.viviendaid})</p>
+                  <p>
+                    <strong>Propietaria:</strong>{" "}
+                    {personas[propiedad.propietariaid] || "Desconocido"} (ID: {propiedad.propietariaid})
+                  </p>
+                </div>
+              </div>
               <div className="info-buttons">
                 <button className="modificar-btn" onClick={() => navegar(`/propiedad-vivienda/modificar-propiedad-vivienda/${propiedad.id_propiedad_vivienda}`)}>
                   Modificar

@@ -73,19 +73,8 @@ const Personas = () => {
 
   return (
     <div className="container">
-      <div className="header text-center">
-        <h1>CRUD</h1>
-        <h1>Personas</h1>
-      </div>
-
-      <div className="button-container text-center">
-        <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
-        <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-        <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
-        <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
-        <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-        <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
-        <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
+      <div className="header">
+        <h3>Aqui podras ver la información acerca de los departamentos.</h3>
       </div>
 
       {!cargando && (
@@ -101,22 +90,25 @@ const Personas = () => {
           <p>Cargando personas...</p>
         ) : personas.length > 0 ? (
           personas.map((persona) => (
-            <div className="info-card" key={persona.id_persona}>
-              <h2>{persona.nombre}</h2>
-              <p><strong>Persona ID: </strong> {persona.id_persona}</p>
-              {/*<p><strong>Documento Identidad:</strong> {persona.documentoidentidad}</p>*/}
-              <p><strong>Teléfono:</strong> {persona.telefono}</p>
-              <p><strong>Edad:</strong> {persona.edad}</p>
-              <p><strong>Sexo:</strong> {persona.sexo}</p>
-              <p>
-                <strong>Cabeza de Familia:</strong>{" "}
-                {persona.cabezafamilia ? (
-                  `${nombresCabeza[persona.cabezafamilia]} (ID: ${persona.cabezafamilia})`
-                ) : (
-                  "No aplica"
-                )}
-              </p>
-
+            <div className="info-container">
+              <div className="info-card" key={persona.id_persona}>
+                <h2>{persona.nombre}</h2>
+                <div className="info-card-container">
+                  <p><strong>Persona ID: </strong> {persona.id_persona}</p>
+                  {/*<p><strong>Documento Identidad:</strong> {persona.documentoidentidad}</p>*/}
+                  <p><strong>Teléfono:</strong> {persona.telefono}</p>
+                  <p><strong>Edad:</strong> {persona.edad}</p>
+                  <p><strong>Sexo:</strong> {persona.sexo}</p>
+                  <p>
+                    <strong>Cabeza de Familia:</strong>{" "}
+                    {persona.cabezafamilia ? (
+                      `${nombresCabeza[persona.cabezafamilia]} (ID: ${persona.cabezafamilia})`
+                    ) : (
+                      "No aplica"
+                    )}
+                  </p>
+                </div>
+              </div>
               <div className="info-buttons">
                 <button className="modificar-btn" onClick={() => navegar(`/personas/modificar-persona/${persona.id_persona}`)}>
                   Modificar

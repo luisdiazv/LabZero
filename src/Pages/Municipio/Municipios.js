@@ -87,19 +87,8 @@ const Municipios = () => {
 
   return (
     <div className="container">
-      <div className="header text-center">
-        <h1>CRUD</h1>
-        <h1>Municipios</h1>
-      </div>
-
-      <div className="button-container text-center">
-        <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
-        <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-        <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
-        <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
-        <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-        <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
-        <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
+      <div className="header">
+        <h3>Aqui podras ver la información acerca de los municipios.</h3>
       </div>
 
       {!cargando && (
@@ -115,14 +104,17 @@ const Municipios = () => {
           <p>Cargando municipios...</p>
         ) : municipios.length > 0 ? (
           municipios.map((municipio) => (
-            <div className="info-card" key={municipio.id_municipio}>
-              <h2>{municipio.nombre}</h2>
-              <p><strong>ID Municipio:</strong> {municipio.id_municipio}</p>
-              <p><strong>Área:</strong> {municipio.area.toFixed(2)} km²</p>
-              <p><strong>Presupuesto:</strong> ${municipio.presupuesto.toLocaleString()}</p>
-              <p><strong>Departamento:</strong> {nombresDepartamento[municipio.departamentoid] || "Sin asignar"}</p>
-              <p><strong>Alcalde:</strong> {nombresAlcalde[municipio.alcaldeid] || "Sin asignar"}</p>
-
+            <div className="info-container">
+              <div className="info-card" key={municipio.id_municipio}>
+                <h2>{municipio.nombre}</h2>
+                <div className="info-card-container">
+                  <p><strong>ID Municipio:</strong> {municipio.id_municipio}</p>
+                  <p><strong>Área:</strong> {municipio.area.toFixed(2)} km²</p>
+                  <p><strong>Presupuesto:</strong> ${municipio.presupuesto.toLocaleString()}</p>
+                  <p><strong>Departamento:</strong> {nombresDepartamento[municipio.departamentoid] || "Sin asignar"}</p>
+                  <p><strong>Alcalde:</strong> {nombresAlcalde[municipio.alcaldeid] || "Sin asignar"}</p>
+                </div>
+              </div>
               <div className="info-buttons">
                 <button className="modificar-btn" onClick={() => navegar(`/municipios/modificar-municipio/${municipio.id_municipio}`)}>
                   Modificar

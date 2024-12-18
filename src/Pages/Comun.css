@@ -1,4 +1,4 @@
-* {
+/* * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -130,13 +130,7 @@ button:focus {
   outline: none;
 }
 
-.button-container button:not(.inicio-btn) {
-  background-color: #fb923c;
-}
 
-.button-container button:not(.inicio-btn):hover {
-  background-color: #ea580c;
-}
 
 .inicio-btn {
   background-color: #1e3a8a;
@@ -245,4 +239,4 @@ button:focus {
 .red-button:hover {
   background-color: darkred;
   transform: translateY(-3px);
-}
+} */

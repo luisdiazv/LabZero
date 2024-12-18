@@ -43,7 +43,7 @@ const Departamentos = () => {
               gobernadores[persona.id_persona] = persona.nombre;
             });
           }
-          
+
           setNombresPais(paises);
           setNombresGobernador(gobernadores);
         }
@@ -67,7 +67,7 @@ const Departamentos = () => {
           console.error("Error al eliminar departamento:", error);
           alert("Hubo un problema al eliminar el departamento.");
         } else {
-          setDepartamentos((prevDepartamentos) => 
+          setDepartamentos((prevDepartamentos) =>
             prevDepartamentos.filter((departamento) => departamento.id_departamento !== id)
           );
           alert("Departamento eliminado exitosamente.");
@@ -83,20 +83,10 @@ const Departamentos = () => {
 
   return (
     <div className="container">
-      <div className="header text-center">
-        <h1>CRUD</h1>
-        <h1>Departamentos</h1>
+      <div className="header">
+        <h3>Aqui podras ver la información acerca de los departamentos.</h3>
       </div>
 
-      <div className="button-container text-center">
-        <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
-        <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-        <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
-        <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
-        <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
-        <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
-        <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
-      </div>
 
       {!cargando && (
         <div className="text-center">
@@ -111,12 +101,15 @@ const Departamentos = () => {
           <p>Cargando departamentos...</p>
         ) : departamentos.length > 0 ? (
           departamentos.map((departamento) => (
-            <div className="info-card" key={departamento.id_departamento}>
-              <h2>{departamento.nombre}</h2>
-              <p><strong>Departamento ID: </strong> {departamento.id_departamento}</p>
-              <p><strong>País: </strong> {nombresPais[departamento.paisid] || "No asignado"}</p>
-              <p><strong>Gobernador: </strong> {nombresGobernador[departamento.gobernadorid] || "No asignado"}</p>
-
+            <div className="info-container">
+              <div className="info-card" key={departamento.id_departamento}>
+                <h2>{departamento.nombre}</h2>
+                <div className="info-card-container">
+                  <p><strong>Departamento ID: </strong> {departamento.id_departamento}</p>
+                  <p><strong>País: </strong> {nombresPais[departamento.paisid] || "No asignado"}</p>
+                  <p><strong>Gobernador: </strong> {nombresGobernador[departamento.gobernadorid] || "No asignado"}</p>
+                </div>
+              </div>
               <div className="info-buttons">
                 <button className="modificar-btn" onClick={() => navegar(`/departamentos/modificar-departamento/${departamento.id_departamento}`)}>
                   Modificar
@@ -130,6 +123,7 @@ const Departamentos = () => {
                 </button>
               </div>
             </div>
+
           ))
         ) : (
           <p>No hay departamentos disponibles.</p>
