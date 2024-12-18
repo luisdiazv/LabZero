@@ -2,7 +2,7 @@ import { restAPI } from "../API/postgRestAPI";
 
 export const readAllPropiedadVivienda = async () => {
   try {
-    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").order("propietariaid");
+    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").order("id_propiedad_vivienda");
 
     if (error) {
       console.error("Error al obtener propiedad_vivienda:", error);
