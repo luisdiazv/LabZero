@@ -2,46 +2,69 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { createMunicipio } from "../../Ctrl/MunicipioCtrl";
 import { readAllDepartamento } from "../../Ctrl/DepartamentoCtrl";
-//import { readAllPersona } from "../../Ctrl/PersonaCtrl";
+import { readAllPersona } from "../../Ctrl/PersonaCtrl"; // Importar la función para leer personas
 
 const CrearMunicipio = () => {
   const [municipio, setMunicipio] = useState({
     nombre: "",
     area: "",
     presupuesto: "",
-    departamentoID: "",
-    alcaldeID: null,
+    departamentoid: "",
+    alcaldeid: null,
   });
   const [departamentos, setDepartamentos] = useState([]);
+  const [personas, setPersonas] = useState([]); // Lista de personas para el selector de alcalde
   const [cargando, setCargando] = useState(false);
+  const [nombreError, setNombreError] = useState(""); // Validación para el nombre
   const [areaError, setAreaError] = useState("");
   const [presupuestoError, setPresupuestoError] = useState("");
   const navegar = useNavigate();
 
-  // Cargar los departamentos para el select
+  // Cargar los departamentos y personas para los selects
   useEffect(() => {
-    const cargarDepartamentos = async () => {
+    const cargarDatos = async () => {
       try {
-        const { data, error } = await readAllDepartamento();
-        if (error) {
-          console.error("Error al obtener departamentos:", error);
+        const [deptResponse, personaResponse] = await Promise.all([
+          readAllDepartamento(),
+          readAllPersona(),
+        ]);
+
+        if (deptResponse.error) {
+          console.error("Error al obtener departamentos:", deptResponse.error);
           alert("Hubo un problema al cargar los departamentos.");
         } else {
-          setDepartamentos(data);
+          setDepartamentos(deptResponse.data);
+        }
+
+        if (personaResponse.error) {
+          console.error("Error al obtener personas:", personaResponse.error);
+          alert("Hubo un problema al cargar las personas.");
+        } else {
+          setPersonas(personaResponse.data);
         }
       } catch (err) {
-        console.error("Error inesperado al cargar departamentos:", err);
-        alert("Hubo un error inesperado.");
+        console.error("Error inesperado al cargar datos:", err);
+        alert("Hubo un error inesperado al cargar los datos.");
       }
     };
 
-    cargarDepartamentos();
+    cargarDatos();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMunicipio({ ...municipio, [name]: value });
 
+    // Validación de nombre (mínimo 3 caracteres)
+    if (name === "nombre") {
+      if (value.length < 3) {
+        setNombreError("El nombre debe tener al menos 3 caracteres.");
+      } else {
+        setNombreError("");
+      }
+    }
+
+    // Validación de área (mayor a 0)
     if (name === "area") {
       if (value <= 0 || isNaN(value)) {
         setAreaError("El área debe ser un número mayor que 0.");
@@ -50,6 +73,7 @@ const CrearMunicipio = () => {
       }
     }
 
+    // Validación de presupuesto (mayor a 0)
     if (name === "presupuesto") {
       if (value <= 0 || isNaN(value)) {
         setPresupuestoError("El presupuesto debe ser un número mayor que 0.");
@@ -61,6 +85,12 @@ const CrearMunicipio = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validaciones finales antes de enviar
+    if (nombreError || municipio.nombre.length < 3) {
+      setNombreError("El nombre debe tener al menos 3 caracteres.");
+      return;
+    }
 
     if (areaError || municipio.area <= 0 || municipio.area === "") {
       setAreaError("El área debe ser un número mayor que 0.");
@@ -102,6 +132,7 @@ const CrearMunicipio = () => {
           onChange={handleChange}
           required
         />
+        {nombreError && <p style={{ color: "red" }}>{nombreError}</p>}
         <input
           type="number"
           name="area"
@@ -114,15 +145,15 @@ const CrearMunicipio = () => {
         <input
           type="number"
           name="presupuesto"
-          placeholder="Presupuesto (en millones)"
+          placeholder="Presupuesto"
           value={municipio.presupuesto}
           onChange={handleChange}
           required
         />
         {presupuestoError && <p style={{ color: "red" }}>{presupuestoError}</p>}
         <select
-          name="departamentoID"
-          value={municipio.departamentoID}
+          name="departamentoid"
+          value={municipio.departamentoid}
           onChange={handleChange}
           required
         >
@@ -133,13 +164,18 @@ const CrearMunicipio = () => {
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          name="alcaldeID"
-          placeholder="ID del Alcalde (opcional)"
-          value={municipio.alcaldeID || ""}
+        <select
+          name="alcaldeid"
+          value={municipio.alcaldeid || ""}
           onChange={handleChange}
-        />
+        >
+          <option value="">Seleccione un Alcalde (opcional)</option>
+          {personas.map((persona) => (
+            <option key={persona.id_persona} value={persona.id_persona}>
+              {persona.nombre} (ID: {persona.id_persona})
+            </option>
+          ))}
+        </select>
 
         {/* Botones en la misma línea */}
         <div className="form-buttons">

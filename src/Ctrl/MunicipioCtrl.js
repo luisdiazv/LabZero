@@ -1,4 +1,5 @@
 import { restAPI } from "../API/postgRestAPI";
+import { deleteVivienda } from "./ViviendaCtrl";
 
 export const readAllMunicipio = async () => {
     try {
@@ -31,12 +32,13 @@ export const readMunicipio = async (id) => {
 
 export const deleteMunicipio = async (id) => {
     try {
-        const { error: errorRefsDef } = await restAPI.from("vivienda").delete().eq("id_municipio", id);
-
+        
+        const { error: errorRefsDef } = await deleteVivienda(id);
         if (errorRefsDef) {
             console.error(`Error eliminando referencias definitivas en Vivienda:`, errorRefsDef);
             return { data: [], error: errorRefsDef };
         }
+
         const { data, error } = await restAPI.from("municipio").delete().eq("id_municipio", id);
         if (error) {
             console.error(`Error al eliminar municipio con ID ${id}: `, error);

@@ -12,10 +12,12 @@ const ModificarMunicipio = () => {
   const [alcaldes, setAlcaldes] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [actualizando, setActualizando] = useState(false);
+  const [nombreError, setNombreError] = useState("");
   const [areaError, setAreaError] = useState("");
   const [presupuestoError, setPresupuestoError] = useState("");
   const navegar = useNavigate();
 
+  // Cargar datos iniciales
   useEffect(() => {
     const cargarMunicipio = async () => {
       try {
@@ -58,7 +60,7 @@ const ModificarMunicipio = () => {
           console.error("Error al obtener personas:", error);
           alert("Hubo un problema al cargar las personas.");
         } else {
-          setAlcaldes(data.filter((persona) => persona.sexo)); // Filtra personas con sexo definido
+          setAlcaldes(data);
         }
       } catch (err) {
         console.error("Error inesperado:", err);
@@ -71,38 +73,43 @@ const ModificarMunicipio = () => {
     cargarAlcaldes();
   }, [id, navegar]);
 
+  // Funciones de validación
+  const validarNombre = (nombre) => {
+    if (nombre.length < 3) return "El nombre debe tener al menos 3 caracteres.";
+    return "";
+  };
+
+  const validarNumero = (valor, campo) => {
+    if (valor <= 0 || isNaN(valor)) {
+      return `El ${campo} debe ser un número mayor que 0.`;
+    }
+    return "";
+  };
+
+  // Manejar cambios en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     setMunicipio({ ...municipio, [name]: value });
 
-    if (name === "area") {
-      if (value <= 0 || isNaN(value)) {
-        setAreaError("El área debe ser un número mayor que 0.");
-      } else {
-        setAreaError("");
-      }
-    }
-
-    if (name === "presupuesto") {
-      if (value <= 0 || isNaN(value)) {
-        setPresupuestoError("El presupuesto debe ser un número mayor que 0.");
-      } else {
-        setPresupuestoError("");
-      }
-    }
+    if (name === "nombre") setNombreError(validarNombre(value));
+    if (name === "area") setAreaError(validarNumero(value, "área"));
+    if (name === "presupuesto") setPresupuestoError(validarNumero(value, "presupuesto"));
   };
 
+  // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (areaError || municipio.area <= 0 || municipio.area === "") {
-      setAreaError("El área debe ser un número mayor que 0.");
-      return; // No continuar si hay un error en el área
-    }
+    // Validaciones finales
+    const nombreErr = validarNombre(municipio.nombre);
+    const areaErr = validarNumero(municipio.area, "área");
+    const presupuestoErr = validarNumero(municipio.presupuesto, "presupuesto");
 
-    if (presupuestoError || municipio.presupuesto <= 0 || municipio.presupuesto === "") {
-      setPresupuestoError("El presupuesto debe ser un número mayor que 0.");
-      return; // No continuar si hay un error en el presupuesto
+    if (nombreErr || areaErr || presupuestoErr) {
+      setNombreError(nombreErr);
+      setAreaError(areaErr);
+      setPresupuestoError(presupuestoErr);
+      return;
     }
 
     setActualizando(true);
@@ -141,6 +148,7 @@ const ModificarMunicipio = () => {
             required
             className="form-input"
           />
+          {nombreError && <p className="error-message">{nombreError}</p>}
           <input
             type="number"
             name="area"
@@ -163,8 +171,8 @@ const ModificarMunicipio = () => {
           {presupuestoError && <p className="error-message">{presupuestoError}</p>}
 
           <select
-            name="DepartamentoID"
-            value={municipio.DepartamentoID}
+            name="departamentoid"
+            value={municipio.departamentoid}
             onChange={handleChange}
             required
             className="form-select"
@@ -178,12 +186,12 @@ const ModificarMunicipio = () => {
           </select>
 
           <select
-            name="alcaldeID"
-            value={municipio.alcaldeID}
+            name="alcaldeid"
+            value={municipio.alcaldeid || ""}
             onChange={handleChange}
             className="form-select"
           >
-            <option value={null}>Seleccionar Alcalde (opcional)</option>
+            <option value="">Seleccionar Alcalde (opcional)</option>
             {alcaldes.map((alcalde) => (
               <option key={alcalde.id_persona} value={alcalde.id_persona}>
                 {alcalde.nombre} (ID: {alcalde.id_persona})
@@ -191,7 +199,6 @@ const ModificarMunicipio = () => {
             ))}
           </select>
 
-          {/* Botones en la misma línea */}
           <div className="form-buttons">
             <button
               type="submit"
