@@ -7,7 +7,7 @@ import "../Comun.css";
 const ModificarVivienda = () => {
     const { id } = useParams();
     const [vivienda, setVivienda] = useState(null);
-    const [ciudades, setCiudades] = useState([]);
+    const [, setCiudades] = useState([]);
     const [cargando, setCargando] = useState(true);
     const [actualizando, setActualizando] = useState(false);
     const [direccionError, setDireccionError] = useState("");

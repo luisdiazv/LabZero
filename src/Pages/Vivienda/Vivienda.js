@@ -98,9 +98,8 @@ const Viviendas = () => {
             <div className="button-container text-center">
                 <button className="inicio-btn" onClick={() => navegar("/")}>Inicio</button>
                 <button id="Personas" onClick={() => navegar("/personas")}>Personas</button>
-                <button id="Vivienda" onClick={() => navegar("/viviendas")}>Viviendas</button>
-                <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-vivienda")}>Propiedad de Vivienda</button>
-                <button id="Residencia" onClick={() => navegar("/residencias")}>Residencias</button>
+                <button id="Vivienda" onClick={() => navegar("/viviendas")}>Vivienda</button>
+                <button id="Propiedad de Vivienda" onClick={() => navegar("/propiedad-viviendas")}>Propiedad de Vivienda</button>
                 <button id="Municipios" onClick={() => navegar("/municipios")}>Municipios</button>
                 <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
                 <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
