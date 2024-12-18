@@ -31,7 +31,7 @@ export const readPropiedadVivienda = async (id1, id2) => {
 
 export const deletePropiedadvivienda = async (id1 , id2) => {
   try {
-    const { data, error } = await supabase.from("propiedad_vivienda").delete().eq("propietariaid", id1).eq("viviendaid", id2);
+    const { data, error } = await restAPI.from("propiedad_vivienda").delete().eq("propietariaid", id1).eq("viviendaid", id2);
     if (error) {
       console.error("Error al eliminar proviedad_vivienda con propietariaID ${id1} y viviendaID ${id2}:", error);
       return { data: [], error };
