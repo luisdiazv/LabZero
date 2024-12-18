@@ -7,7 +7,7 @@ import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 const CrearDepartamento = () => {
   const [departamento, setDepartamento] = useState({
     nombre: "",
-    idpais: "",
+    paisid: "",
     gobernadorid: "",
   });
   const [paises, setPaises] = useState([]);
@@ -16,25 +16,26 @@ const CrearDepartamento = () => {
   const [nombreError, setNombreError] = useState("");
   const navegar = useNavigate();
 
-  // Cargar los países y los posibles gobernadores
   useEffect(() => {
     const cargarDatos = async () => {
       try {
         // Cargar los países
         const { data: paisesData, error: paisesError } = await readAllPais();
-        if (paisesError) {
-          console.error("Error al obtener países:", paisesError);
+        if (paisesError || !Array.isArray(paisesData)) {
+          console.error("Error al obtener países:", paisesError || paisesData);
           alert("Hubo un problema al cargar los países.");
         } else {
+          console.log("Países recibidos:", paisesData);
           setPaises(paisesData);
         }
 
-        // Cargar las personas que pueden ser gobernadores
+        // Cargar las personas (gobernadores)
         const { data: personasData, error: personasError } = await readAllPersona();
-        if (personasError) {
-          console.error("Error al obtener personas:", personasError);
+        if (personasError || !Array.isArray(personasData)) {
+          console.error("Error al obtener personas:", personasError || personasData);
           alert("Hubo un problema al cargar los gobernadores.");
         } else {
+          console.log("Personas recibidas:", personasData);
           setGobernadores(personasData);
         }
       } catch (err) {
@@ -99,30 +100,28 @@ const CrearDepartamento = () => {
         />
         {nombreError && <p style={{ color: "red" }}>{nombreError}</p>}
 
-        <select name="idpais" value={departamento.idpais} onChange={handleChange} required>
-  <option value="">Seleccione el País</option>
-  {paises.map((pais) => (
-    <option key={pais.id_pais} value={pais.id_pais}>
-      {pais.nombre} {/* Aquí solo se muestra el nombre */}
-    </option>
-  ))}
-</select>
+        <select name="paisid" value={departamento.paisid} onChange={handleChange} required>
+          <option value="">Seleccione el País</option>
+          {paises.map((pais) => (
+            <option key={pais.id_pais} value={pais.id_pais}>
+              {pais.nombre} (ID: {pais.id_pais})
+            </option>
+          ))}
+        </select>
 
-<select
-  name="gobernadorid"
-  value={departamento.gobernadorid}
-  onChange={handleChange}
->
-  <option value="">Seleccionar Gobernador (opcional)</option>
-  {gobernadores.map((persona) => (
-    <option key={persona.id_persona} value={persona.id_persona}>
-      {persona.nombre} {/* Aquí solo se muestra el nombre */}
-    </option>
-  ))}
-</select>
+        <select
+          name="gobernadorid"
+          value={departamento.gobernadorid}
+          onChange={handleChange}
+        >
+          <option value="">Seleccionar Gobernador (opcional)</option>
+          {gobernadores.map((persona) => (
+            <option key={persona.id_persona} value={persona.id_persona}>
+              {persona.nombre} (ID: {persona.id_persona})
+            </option>
+          ))}
+        </select>
 
-
-        {/* Botones en la misma línea */}
         <div className="form-buttons">
           <button type="submit" disabled={cargando} className="form-button form-button-small">
             {cargando ? "Creando..." : "Crear"}

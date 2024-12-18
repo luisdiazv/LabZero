@@ -74,7 +74,7 @@ export const deletePersona = async (id) => {
       if (error) console.warn(`Error en la actualización definitiva en la tabla ${index + 1}:`, error);
     });
 
-    // Elimina las referencias en tablas con FK de persona que permitan null
+    // Elimina las referencias en tablas con FK de persona que no permitan null
     const { error: errorRefsDef } = await restAPI.from("persona_vivienda").delete().eq("propietariaid", id);
 
     if (errorRefsDef) {
@@ -97,7 +97,7 @@ export const deletePersona = async (id) => {
     console.error(`Error inesperado al eliminar persona con ID ${id}:`, err);
     return { data: [], error: err };
   }
-  
+
 };
 
 export const createPersona = async (persona) => {
