@@ -6,9 +6,14 @@ import Home from "./Pages/Home";
 import Personas from "./Pages/Persona/Personas";
 import CrearPersona from "./Pages/Persona/CreatePersona";
 import ModificarPersona from './Pages/Persona/UpdatePersona';
-import Paises from './Pages/Pais/Paises'; 
+import Paises from './Pages/Pais/Paises';
 import CrearPais from './Pages/Pais/CreatePais';
 import ModificarPais from './Pages/Pais/UpdatePais';
+import Departamentos from './Pages/Departamentos/Departamento';
+import CrearDepartamento from './Pages/Departamentos/CreateDepartameto';
+import ModificarDepartamento from './Pages/Departamentos/UpdateDepartamento';
+
+import CrearVivienda from './Pages/Vivienda/CreateVivienda';
 
 function App() {
   return (
@@ -21,6 +26,11 @@ function App() {
         <Route path="/paises/" element={<Paises />} />
         <Route path="/paises/crear-pais" element={<CrearPais />} />
         <Route path="/paises/modificar-pais/:id" element={<ModificarPais />} />
+        <Route path="/departamentos/" element={<Departamentos />} />
+        <Route path="/departamentos/crear-departamento" element={<CrearDepartamento />} />
+        <Route path="/departamentos/modificar-departamento/:id" element={<ModificarDepartamento />} />
+
+        <Route path="/viviendas/crear-vivienda" element={<CrearVivienda />} />
       </Routes>
     </div>
   );
