@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { readDepartamento, updateDepartamento } from "../../Ctrl/DepartamentoCtrl";
 import { readAllPais } from "../../Ctrl/PaisCtrl";
-import { readAllPersona } from "../../Ctrl/PersonaCtrl"; // Usamos este controlador para las personas
+import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 import "../Comun.css";
 
 const ModificarDepartamento = () => {
@@ -10,10 +10,10 @@ const ModificarDepartamento = () => {
   const [departamento, setDepartamento] = useState({
     nombre: "",
     paisid: "",
-    gobernadorid: "", // Aseguramos que este valor esté inicializado
+    gobernadorid: "",
   });
   const [paises, setPaises] = useState([]);
-  const [personas, setPersonas] = useState([]); // Lista de personas disponibles
+  const [personas, setPersonas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [actualizando, setActualizando] = useState(false);
   const [nombreError, setNombreError] = useState("");
@@ -33,7 +33,7 @@ const ModificarDepartamento = () => {
           setDepartamento({
             nombre: dep.nombre || "",
             paisid: dep.paisid || "",
-            gobernadorid: dep.gobernadorid || "", // Aseguramos que gobernadorid se setee correctamente
+            gobernadorid: dep.gobernadorid || "",
           });
         }
       } catch (err) {
@@ -84,8 +84,8 @@ const ModificarDepartamento = () => {
     const { name, value } = e.target;
     setDepartamento({ ...departamento, [name]: value });
 
-    if (name === "nombre" && value.trim() === "") {
-      setNombreError("El nombre del departamento es obligatorio.");
+    if (name === "nombre" && value.trim().length < 3) {
+      setNombreError("El nombre del departamento debe tener al menos 3 caracteres.");
     } else {
       setNombreError("");
     }
@@ -100,8 +100,8 @@ const ModificarDepartamento = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!departamento.nombre || departamento.nombre.trim() === "") {
-      setNombreError("El nombre del departamento es obligatorio.");
+    if (nombreError || departamento.nombre.trim().length < 3) {
+      setNombreError("El nombre del departamento debe tener al menos 3 caracteres.");
       return;
     }
 
@@ -147,7 +147,7 @@ const ModificarDepartamento = () => {
             required
             className="form-input"
           />
-          {nombreError && <p className="error-message">{nombreError}</p>}
+          {nombreError && <p style={{ color: "red" }}>{nombreError}</p>}
 
           <select
             name="paisid"

@@ -25,11 +25,11 @@ const CrearDepartamento = () => {
           console.error("Error al obtener países:", paisesError || paisesData);
           alert("Hubo un problema al cargar los países.");
         } else {
-          console.log("Países recibidos:", paisesData); // Verifica los datos recibidos
+          console.log("Países recibidos:", paisesData);
           setPaises(paisesData);
         }
 
-        // Cargar las personas que pueden ser gobernadores
+        // Cargar las personas (gobernadores)
         const { data: personasData, error: personasError } = await readAllPersona();
         if (personasError || !Array.isArray(personasData)) {
           console.error("Error al obtener personas:", personasError || personasData);

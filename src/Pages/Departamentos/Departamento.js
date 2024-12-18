@@ -2,8 +2,8 @@ import "../Comun.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { readAllDepartamento, deleteDepartamento } from "../../Ctrl/DepartamentoCtrl";
-import { readAllPais } from "../../Ctrl/PaisCtrl"; // Debes usar este controlador para los países
-import { readAllPersona } from "../../Ctrl/PersonaCtrl"; // Debes usar este controlador para los gobernadores
+import { readAllPais } from "../../Ctrl/PaisCtrl";
+import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 
 const Departamentos = () => {
   const [departamentos, setDepartamentos] = useState([]);
@@ -24,32 +24,26 @@ const Departamentos = () => {
         } else {
           setDepartamentos(data);
 
-          // Cargar todos los países y gobernadores de una sola vez
           const [paisesResponse, gobernadoresResponse] = await Promise.all([
-            // Cargar nombres de países
             readAllPais(),
-            // Cargar nombres de gobernadores
             readAllPersona()
           ]);
 
           const paises = {};
           const gobernadores = {};
 
-          // Procesar la respuesta de países
           if (paisesResponse?.data) {
             paisesResponse.data.forEach((pais) => {
-              paises[pais.id_pais] = pais.nombre; // Asegúrate de usar el ID correcto de país
+              paises[pais.id_pais] = pais.nombre;
             });
           }
 
-          // Procesar la respuesta de gobernadores
           if (gobernadoresResponse?.data) {
             gobernadoresResponse.data.forEach((persona) => {
-              gobernadores[persona.id_persona] = persona.nombre; // Usar el id_persona si es necesario
+              gobernadores[persona.id_persona] = persona.nombre;
             });
           }
-
-          // Actualizar el estado con los nombres de los países y gobernadores
+          
           setNombresPais(paises);
           setNombresGobernador(gobernadores);
         }
@@ -73,7 +67,6 @@ const Departamentos = () => {
           console.error("Error al eliminar departamento:", error);
           alert("Hubo un problema al eliminar el departamento.");
         } else {
-          // Eliminamos el departamento de la lista de manera eficiente
           setDepartamentos((prevDepartamentos) => 
             prevDepartamentos.filter((departamento) => departamento.id_departamento !== id)
           );
