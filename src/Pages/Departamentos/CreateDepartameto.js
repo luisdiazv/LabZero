@@ -35,7 +35,7 @@ const CrearDepartamento = () => {
           console.error("Error al obtener personas:", personasError || personasData);
           alert("Hubo un problema al cargar los gobernadores.");
         } else {
-          console.log("Personas recibidas:", personasData); // Verifica los datos recibidos
+          console.log("Personas recibidas:", personasData);
           setGobernadores(personasData);
         }
       } catch (err) {
