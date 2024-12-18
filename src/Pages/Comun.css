@@ -157,7 +157,7 @@ button:focus {
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px; 
+  margin-bottom: 20px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -201,7 +201,7 @@ button:focus {
 }
 
 .eliminar-btn:hover {
-  background-color: darkred; 
+  background-color: darkred;
 }
 
 .eliminar-btn:active {
@@ -209,7 +209,7 @@ button:focus {
 }
 
 .crear-btn {
-  background-color: #22c55e; 
+  background-color: #22c55e;
   color: white;
   border: none;
   padding: 12px 20px;

@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 
 // Vistas
 import Home from "./Pages/Home";
@@ -23,8 +23,48 @@ import CrearPropiedadVivienda from './Pages/PropiedadVivienda/CreatePropiedadViv
 import ModificarPropiedadVivienda from './Pages/PropiedadVivienda/UpdatePropiedadVivienda';
 
 function App() {
+  const navegar = useNavigate();
+  const location = useLocation();
+
   return (
     <div className='App'>
+      <div className="button-container text-center">
+        <button
+          id="Personas"
+          onClick={() => navegar("/personas")}
+          className={location.pathname === "/personas" ? "active-button" : ""}
+        >
+          Personas
+        </button>
+        <button
+          id="Vivienda"
+          onClick={() => navegar("/viviendas")}
+          className={location.pathname === "/viviendas" ? "active-button" : ""}
+        >
+          Vivienda
+        </button>
+        <button
+          id="Municipios"
+          onClick={() => navegar("/municipios")}
+          className={location.pathname === "/municipios" ? "active-button" : ""}
+        >
+          Municipios
+        </button>
+        <button
+          id="Departamentos"
+          onClick={() => navegar("/departamentos")}
+          className={location.pathname === "/departamentos" ? "active-button" : ""}
+        >
+          Departamentos
+        </button>
+        <button
+          id="Paises"
+          onClick={() => navegar("/paises")}
+          className={location.pathname === "/paises" ? "active-button" : ""}
+        >
+          Paises
+        </button>
+      </div>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/personas/" element={<Personas />} />
