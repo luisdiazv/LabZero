@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { readMunicipio, updateMunicipio, readAllPersona } from "../../Ctrl/MunicipioCtrl";
-import readAllDepartamento
+import { readMunicipio, updateMunicipio } from "../../Ctrl/MunicipioCtrl";
+import { readAllDepartamento } from "../../Ctrl/DepartamentoCtrl";
+import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 import "../Comun.css";
 
 const ModificarMunicipio = () => {

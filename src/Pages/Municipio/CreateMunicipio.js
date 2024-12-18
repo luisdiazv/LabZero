@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createMunicipio, readAllDepartamento } from "../../Ctrl/MunicipioCtrl";
+import { createMunicipio } from "../../Ctrl/MunicipioCtrl";
+import { readAllDepartamento } from "../../Ctrl/DepartamentoCtrl";
+//import { readAllPersona } from "../../Ctrl/PersonaCtrl";
 
 const CrearMunicipio = () => {
   const [municipio, setMunicipio] = useState({
