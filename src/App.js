@@ -18,6 +18,9 @@ import ModificarMunicipio from './Pages/Municipio/UpdateMunicipio';
 import Viviendas from './Pages/Vivienda/Vivienda';
 import CrearVivienda from './Pages/Vivienda/CreateVivienda';
 import ModificarVivienda from './Pages/Vivienda/UpdateVivienda';
+import PropiedadVivienda from './Pages/PropiedadVivienda/PropiedadVivienda';
+import CrearPropiedadVivienda from './Pages/PropiedadVivienda/CreatePropiedadVivienda';
+import ModificarPropiedadVivienda from './Pages/PropiedadVivienda/UpdatePropiedadVivienda';
 
 function App() {
   return (
@@ -39,6 +42,9 @@ function App() {
         <Route path="/viviendas/" element={<Viviendas />} />
         <Route path="/viviendas/crear-vivienda/" element={<CrearVivienda />} />
         <Route path="/viviendas/modificar-vivienda/:id" element={<ModificarVivienda />} />
+        <Route path="/propiedad-vivienda/" element={<PropiedadVivienda />} />
+        <Route path="/propiedad-vivienda/crear-propiedad-vivienda" element={<CrearPropiedadVivienda />} />
+        <Route path="/propiedad-vivienda/modificar-propiedad-vivienda/:id" element={<ModificarPropiedadVivienda />} />
       </Routes>
     </div>
   );

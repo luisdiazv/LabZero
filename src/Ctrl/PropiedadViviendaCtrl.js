@@ -2,7 +2,7 @@ import { restAPI } from "../API/postgRestAPI";
 
 export const readAllPropiedadVivienda = async () => {
   try {
-    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").order("propietariaid");
+    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").order("id_propiedad_vivienda");
 
     if (error) {
       console.error("Error al obtener propiedad_vivienda:", error);
@@ -15,9 +15,9 @@ export const readAllPropiedadVivienda = async () => {
   }
 };
 
-export const readPropiedadVivienda = async (id1, id2) => {
+export const readPropiedadVivienda = async (id) => {
   try {
-    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").eq("propietariaid", id1).eq("viviendaid", id2);
+    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").eq("id_propiedad_vivienda", id);
     if (error) {
       console.error("Error al obtener propiedad_vivienda:", error);
       return { data: [], error };
@@ -29,19 +29,20 @@ export const readPropiedadVivienda = async (id1, id2) => {
   }
 };
 
-export const deletePropiedadvivienda = async (id1 , id2) => {
+export const deletePropiedadVivienda = async (id) => {
   try {
-    const { data, error } = await restAPI.from("propiedad_vivienda").delete().eq("propietariaid", id1).eq("viviendaid", id2);
+    const { data, error } = await restAPI.from("propiedad_vivienda").delete().eq("id_propiedad_vivienda", id);
     if (error) {
-      console.error("Error al eliminar proviedad_vivienda con propietariaID ${id1} y viviendaID ${id2}:", error);
+      console.error(`Error al eliminar proviedad_vivienda con PropiedadVivienda ID ${id}:`, error);
       return { data: [], error };
     }
     return { data, error: null };
   } catch (err) {
-    console.error("Error inesperado al eliminar proviedad_vivienda con propietariaID ${id1} y viviendaID ${id2}:", err);
+    console.error(`Error inesperado al eliminar proviedad_vivienda con PropiedadVivienda ID ${id}:`, err);
     return { data: [], error: err };
   }
 };
+
 export const createPropiedadVivienda = async (propiedad_vivienda) => {
   try {
     const { data, error } = await restAPI.from("propiedad_vivienda").insert(propiedad_vivienda);
@@ -58,22 +59,41 @@ export const createPropiedadVivienda = async (propiedad_vivienda) => {
 }
 };
 
-export const updatePropiedadVivienda = async (id1, id2, updates) => {
+export const updatePropiedadVivienda = async (id, updates) => {
   try {
 
-      const { data, error } = await restAPI.from("propiedad_vivienda").update(updates).eq("propietariaid", id1).eq("viviendaid", id2);;
+      const { data, error } = await restAPI.from("propiedad_vivienda").update(updates).eq("id_propiedad_vivienda", id);
 
       if (error) {
-          console.error(`Error al modificar propiedad_vivienda con propietariaid ${id1} y viviendaid ${id2}:`, error);
+          console.error(`Error al modificar proviedad_vivienda con PropiedadVivienda ID ${id}:`, error);
           return { data: null, error };
       }
 
       return { data, error: null };
   } catch (err) {
-      console.error(`Error inesperado al modificar propiedad_vivienda con propietariaid ${id1} y viviendaid ${id2}:`, err);
+      console.error(`Error inesperado al modificar proviedad_vivienda con PropiedadVivienda ID ${id}:`, err);
       return { data: null, error: err };
   }
 };
+
+export const tienePropietaria = async (id_vivienda) => {
+  try {
+    const { data, error } = await restAPI.from("propiedad_vivienda").select("*").eq("viviendaid", id_vivienda);
+    
+    if (error) {
+      console.error("Error al obtener propiedad_vivienda:", error);
+      return { data: false, error };  // Cambié aquí para devolver 'false' en caso de error.
+    }
+
+    // Retorna 'true' si hay datos, o 'false' si no hay.
+    return { data: data.length > 0, error: null };
+    
+  } catch (err) {
+    console.error("Error inesperado al obtener propiedad_vivienda:", err);
+    return { data: false, error: err };  // Retorna 'false' en caso de error inesperado.
+  }
+};
+
 /*
 export const getPersona_IDNombre = async () => {
   try {
