@@ -89,7 +89,6 @@ const Municipios = () => {
     <div className="container">
       <div className="header text-center">
         <h1>CRUD</h1>
-        <h1>Municipios</h1>
       </div>
 
       <div className="button-container text-center">
@@ -101,7 +100,7 @@ const Municipios = () => {
         <button id="Departamentos" onClick={() => navegar("/departamentos")}>Departamentos</button>
         <button id="Paises" onClick={() => navegar("/paises")}>Paises</button>
       </div>
-
+      <br></br>
       {!cargando && (
         <div className="text-center">
           <button className="crear-btn" onClick={() => navegar("/municipios/crear-municipio")}>
@@ -119,7 +118,9 @@ const Municipios = () => {
               <h2>{municipio.nombre}</h2>
               <p><strong>ID Municipio:</strong> {municipio.id_municipio}</p>
               <p><strong>Área:</strong> {municipio.area.toFixed(2)} km²</p>
-              <p><strong>Presupuesto:</strong> ${municipio.presupuesto.toLocaleString()}</p>
+              <p><strong>Presupuesto:</strong> ${municipio.presupuesto > 1e24 
+    ? municipio.presupuesto.toExponential(2) // Notación científica con 2 decimales.
+    : municipio.presupuesto.toLocaleString()}</p>
               <p><strong>Departamento:</strong> {nombresDepartamento[municipio.departamentoid] || "Sin asignar"}</p>
               <p><strong>Alcalde:</strong> {nombresAlcalde[municipio.alcaldeid] || "Sin asignar"}</p>
 
