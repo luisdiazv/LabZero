@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createVivienda, readAllMunicipios } from "../../Ctrl/ViviendaCtrl";
+import { createVivienda } from "../../Ctrl/ViviendaCtrl";
+import { readAllMunicipio } from "../../Ctrl/MunicipioCtrl";
 
 const CrearVivienda = () => {
     const [vivienda, setVivienda] = useState({
@@ -19,7 +20,7 @@ const CrearVivienda = () => {
     useEffect(() => {
         const cargarMunicipios = async () => {
             try {
-                const { data, error } = await readAllMunicipios();
+                const { data, error } = await readAllMunicipio();
                 if (error) {
                     console.error("Error al obtener municipios:", error);
                     alert("Hubo un problema al cargar los municipios.");

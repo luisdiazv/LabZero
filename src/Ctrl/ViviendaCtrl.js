@@ -38,7 +38,7 @@ export const deleteVivienda = async (id) => {
             console.error(`Error eliminando referencias definitivas en propiedad_vivienda:`, errorRefsDef);
             return { data: [], error: errorRefsDef };
         }
-        const { data, error } = await supabase.from("vivienda").delete().eq("id_vivienda", id);
+        const { data, error } = await restAPI.from("vivienda").delete().eq("id_vivienda", id);
         if (error) {
             console.error(`Error al eliminar vivienda con ID ${id}: `, error);
             return { data: [], error };
