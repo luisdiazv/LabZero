@@ -2,20 +2,30 @@ import React from 'react';
 
 const Home = () => {
   return (
-    <div className="container">
-      <img src="/mi-imagen.jpg" alt="CRUD" style={{ width: '300px', height: 'auto' }} />
-      <div className="header text-center">
-        <h2>Laboratorio 0</h2>
-        <h1 style={{ color: '#fb923c' }}>CRUD</h1>
-        <p>Presentado por <b>PlanifiKlub</b>:</p>
+    <div className="home-container">
+      <img src="/CRUD.png" alt="CRUD" style={{ width: '100%', height: 'auto' }} />
+      <div className="home-header">
+        <h1>Presentado por <b>PlanifiKlub</b>:</h1>
         <ul className="list">
-          <li>Jonathan Steven Ochoa Celis</li>
-          <li>Luis Alfonso Diaz Vergel</li>
-          <li>Maria Jose Jara Herrera</li>
-          <li>Sergio Alexander Parada Amarillo</li>
-        </ul>
+          <div className='person-container'>
+            <img className="person-img" src="/jonhatan.png" alt="CRUD" style={{ width: '80%', height: 'auto' }} />
+            <h3><strong>Jonathan Steven Ochoa Celis</strong></h3>
+          </div>
+          <div className='person-container'>
+            <img className="person-img" src="/luis.png" alt="CRUD" style={{ width: '80%', height: 'auto' }} />
+            <h3><strong>Luis Alfonso Diaz Vergel</strong></h3>
+          </div>
+          <div className='person-container'>
+            <img className="person-img" src="/chara.png" alt="CRUD" style={{ width: '80%', height: 'auto' }} />
+            <h3><strong>Maria Jose Jara Herrera</strong></h3>
+          </div>
 
-        {/* Agregando la imagen desde la carpeta public */}
+          <div className='person-container'>
+            <img className="person-img" src="/sergio.png" alt="CRUD" style={{ width: '80%', height: 'auto' }} />
+            <h3><strong>Sergio Alexander Parada Amarillo</strong></h3>
+          </div>
+
+        </ul>
 
       </div>
     </div>

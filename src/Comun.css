@@ -28,6 +28,14 @@ body {
   border-radius: 8px;
 }
 
+.home-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 20px auto;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
 .header {
   text-align: start;
 
@@ -35,6 +43,26 @@ body {
   h3 {
     margin-left: 20px;
   }
+}
+
+.home-header {
+  text-align: start;
+  padding: 10px 0;
+}
+
+.list {
+  display: flex;
+  justify-content: space-around;
+  text-align: center;
+
+}
+
+.person-img {
+  width: 80%;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
 }
 
 .text-center {
