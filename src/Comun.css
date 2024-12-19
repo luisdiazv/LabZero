@@ -28,6 +28,19 @@ body {
   border-radius: 8px;
 }
 
+.hero-image {
+  width: 100%;
+  /* Hace que la imagen ocupe todo el ancho de la pantalla */
+  height: 60vh;
+  /* Ajusta la altura de la imagen a un 60% de la altura de la ventana */
+  object-fit: cover;
+  /* Asegura que la imagen cubra todo el espacio, recortándose si es necesario */
+  display: block;
+  /* Elimina cualquier espacio en blanco debajo de la imagen */
+  margin-bottom: 20px;
+  /* Espacio entre la imagen y el contenido debajo */
+}
+
 .home-container {
   width: 100%;
   max-width: 1200px;
@@ -47,7 +60,11 @@ body {
 
 .home-header {
   text-align: start;
-  padding: 10px 0;
+
+  h1 {
+    padding: 0 0 10px 10px;
+  }
+
 }
 
 .list {
