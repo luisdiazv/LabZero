@@ -77,14 +77,41 @@ const ModificarPersona = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Verificación de edad
     if (edadError || persona.edad <= 0 || persona.edad === "") {
       setEdadError("La edad debe ser un número mayor que 0.");
       return; // No continuar si hay un error en la edad
     }
 
+    // Verificación de teléfono
     if (telefonoError || persona.telefono.length < 7) {
       setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
       return; // No continuar si hay un error en el teléfono
+    }
+
+    // Verificación de la persona cabeza de familia
+    if (persona.cabezafamilia !== "Seleccionar Cabeza de Familia (opcional)") {
+      try {
+        const { data, error } = await readPersona(persona.cabezafamilia);
+        if (error) {
+          console.error("Error al cargar la persona cabeza de familia:", error);
+          alert("Hubo un problema al verificar la persona cabeza de familia.");
+          return;
+        }
+
+        const personaSeleccionada = data[0];
+        if (personaSeleccionada && personaSeleccionada.cabezafamilia !== null) {
+          alert("La persona seleccionada como cabeza de familia ya tiene asignado un cabezafamilia.");
+          return; // No continuar si ya tiene un cabezafamilia
+        }
+      } catch (err) {
+        console.error("Error inesperado al verificar la persona cabeza de familia:", err);
+        alert("Hubo un error al verificar la persona cabeza de familia.");
+        return;
+      }
+    }
+    if (persona.cabezafamilia === "Seleccionar Cabeza de Familia (opcional)") {
+      persona.cabezafamilia = null;
     }
 
     setActualizando(true);
@@ -161,11 +188,13 @@ const ModificarPersona = () => {
             className="form-select"
           >
             <option value={null}>Seleccionar Cabeza de Familia (opcional)</option>
-            {personasCabeza.map((cabeza) => (
-              <option key={cabeza.id_persona} value={cabeza.id_persona}>
-                {cabeza.nombre} (ID: {cabeza.id_persona})
-              </option>
-            ))}
+            {personasCabeza
+              .filter((cabeza) => cabeza.id_persona !== persona.id_persona) // Excluir a sí mismo
+              .map((cabeza) => (
+                <option key={cabeza.id_persona} value={cabeza.id_persona}>
+                  {cabeza.nombre} (ID: {cabeza.id_persona})
+                </option>
+              ))}
           </select>
 
           {/* Botones en la misma línea */}
@@ -177,7 +206,11 @@ const ModificarPersona = () => {
             >
               {actualizando ? "Actualizando..." : "Actualizar"}
             </button>
-            <button type="button" onClick={() => navegar("/personas")} className="form-button cancel-button red-button">
+            <button
+              type="button"
+              onClick={() => navegar("/personas")}
+              className="form-button cancel-button red-button"
+            >
               Cancelar y volver
             </button>
           </div>

@@ -51,10 +51,10 @@ export const deletePersona = async (id) => {
       }
     }
 
-    const { error: errorTransaccionPersonaVivienda } = await restAPI.from("persona_vivienda").delete().eq("propietariaid", id);
+    const { error: errorTransaccionPersonaVivienda } = await restAPI.from("propiedad_vivienda").delete().eq("propietariaid", id);
     if (errorTransaccionPersonaVivienda) {
-      console.error(`Error detectado en la simulación de eliminación en Persona_Vivienda:`, errorTransaccionPersonaVivienda);
-      return { data: [], error: `Simulación fallida en Persona_Vivienda` };
+      console.error(`Error detectado en la simulación de eliminación en Propiedad Vivienda:`, errorTransaccionPersonaVivienda);
+      return { data: [], error: `Simulación fallida en Propiedad Vivienda` };
     }
 
     console.info("Transaccion completada exitosamente. Procediendo con los cambios...");
@@ -75,10 +75,10 @@ export const deletePersona = async (id) => {
     });
 
     // Elimina las referencias en tablas con FK de persona que no permitan null
-    const { error: errorRefsDef } = await restAPI.from("persona_vivienda").delete().eq("propietariaid", id);
+    const { error: errorRefsDef } = await restAPI.from("propiedad_vivienda").delete().eq("propietariaid", id);
 
     if (errorRefsDef) {
-      console.error(`Error eliminando referencias definitivas en Persona_Vivienda:`, errorRefsDef);
+      console.error(`Error eliminando referencias definitivas en Propiedad Vivienda:`, errorRefsDef);
       return { data: [], error: errorRefsDef };
     }
 

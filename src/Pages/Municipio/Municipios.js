@@ -110,7 +110,10 @@ const Municipios = () => {
                 <div className="info-card-container">
                   <p><strong>ID Municipio:</strong> {municipio.id_municipio}</p>
                   <p><strong>Área:</strong> {municipio.area.toFixed(2)} km²</p>
-                  <p><strong>Presupuesto:</strong> ${municipio.presupuesto.toLocaleString()}</p>
+                  <p><strong>Presupuesto:</strong> ${municipio.presupuesto > 1e18
+                    ? municipio.presupuesto.toExponential(2)
+                    : municipio.presupuesto.toLocaleString()}
+                  </p>
                   <p><strong>Departamento:</strong> {nombresDepartamento[municipio.departamentoid] || "Sin asignar"}</p>
                   <p><strong>Alcalde:</strong> {nombresAlcalde[municipio.alcaldeid] || "Sin asignar"}</p>
                 </div>
