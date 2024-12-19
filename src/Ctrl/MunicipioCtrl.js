@@ -33,11 +33,21 @@ export const readMunicipio = async (id) => {
 export const deleteMunicipio = async (id) => {
     try {
         
-        const { error: errorRefsDef } = await deleteVivienda(id);
-        if (errorRefsDef) {
-            console.error(`Error eliminando referencias definitivas en Vivienda:`, errorRefsDef);
-            return { data: [], error: errorRefsDef };
-        }
+           // Obtener todos los departamentos que pertenecen al país
+    const { data: departamentos, error: departamentosError } = await restAPI.from("vivienda").select("*").eq("municipioid", id);
+    if (departamentosError) {
+      console.error("Error al obtener las viviendas:", departamentosError);
+      return { data: [], error: departamentosError };
+    }
+
+    // Eliminar cada departamento relacionado con el país
+    for (let departamento of departamentos) {
+      const { error: deleteDeptError } = await deleteMunicipio(departamento.id_vivienda)
+      if (deleteDeptError) {
+        console.error(`Error al eliminar la vivienda con ID ${departamento.id_vivienda}:`, deleteDeptError);
+        return { data: [], error: deleteDeptError };
+      }
+    }
 
         const { data, error } = await restAPI.from("municipio").delete().eq("id_municipio", id);
         if (error) {
