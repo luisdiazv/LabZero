@@ -71,6 +71,31 @@ const ModificarVivienda = () => {
         cargarCiudades();
     }, [id, navegar]);
 
+    // Verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+    const checkViviendaExistente = async () => {
+        try {
+            const { data, error } = await readAllVivienda(); // Obtener todas las viviendas
+            if (error) {
+                console.error("Error al obtener viviendas:", error);
+                return false;
+            }
+
+            // Usar un ciclo for para verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+            for (let i = 0; i < data.length; i++) {
+                const viviendaItem = data[i];
+                // Comprobamos si la dirección y municipio son los mismos, pero no debemos incluir la vivienda actual
+                if (viviendaItem.direccion === vivienda.direccion && viviendaItem.municipioid === vivienda.municipioid && viviendaItem.id_vivienda !== vivienda.id_vivienda) {
+                    return true; // Si encuentra una vivienda existente, retorna true
+                }
+            }
+
+            return false; // Si no encontró ninguna vivienda con la misma dirección y municipio, retorna false
+        } catch (err) {
+            console.error("Error inesperado:", err);
+            return false;
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setVivienda({ ...vivienda, [name]: value });
@@ -87,7 +112,6 @@ const ModificarVivienda = () => {
         } else {
             setCapacidadError("");
         }
-
 
         if (name === "pisos" && (isNaN(value) || value <= 0)) {
             setPisosError("El número de pisos debe ser mayor que 0.");
@@ -115,7 +139,6 @@ const ModificarVivienda = () => {
             return;
         }
 
-
         if (pisosError || vivienda.pisos <= 0) {
             setPisosError("El número de pisos debe ser mayor que 0.");
             return;
@@ -123,6 +146,13 @@ const ModificarVivienda = () => {
 
         if (municipioidError || !vivienda.municipioid) {
             setMunicipioidError("Debe seleccionar un municipio.");
+            return;
+        }
+
+        // Verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+        const viviendaExistente = await checkViviendaExistente();
+        if (viviendaExistente) {
+            setDireccionError("Ya existe una vivienda con esta dirección en el municipio seleccionado.");
             return;
         }
 
@@ -174,7 +204,6 @@ const ModificarVivienda = () => {
                         className="form-input"
                     />
                     {capacidadError && <p className="error-message">{capacidadError}</p>}
-
 
                     <input
                         type="number"

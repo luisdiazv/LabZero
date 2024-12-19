@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createVivienda } from "../../Ctrl/ViviendaCtrl";
+import { createVivienda, readAllVivienda } from "../../Ctrl/ViviendaCtrl";  // Asegúrate de que readAllVivienda esté correctamente implementada
 import { readAllMunicipio } from "../../Ctrl/MunicipioCtrl";
 
 const CrearVivienda = () => {
@@ -14,6 +14,7 @@ const CrearVivienda = () => {
     const [cargando, setCargando] = useState(false);
     const [capacidadError, setCapacidadError] = useState("");
     const [pisosError, setPisosError] = useState("");
+    const [direccionExistenteError, setDireccionExistenteError] = useState(""); // Error de existencia
     const navegar = useNavigate();
 
     // Cargar los municipios disponibles
@@ -36,6 +37,32 @@ const CrearVivienda = () => {
         cargarMunicipios();
     }, []);
 
+    // Verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+    const checkViviendaExistente = async () => {
+        try {
+            const { data, error } = await readAllVivienda(); // Obtener todas las viviendas
+            if (error) {
+                console.error("Error al obtener viviendas:", error);
+                return false;
+            }
+    
+            // Usar un ciclo for para verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+            for (let i = 0; i < data.length; i++) {
+                const viviendaItem = data[i];
+                console.log(viviendaItem)
+                console.log(vivienda)
+                if (viviendaItem.direccion+"" === vivienda.direccion+"" && viviendaItem.municipioid+"" === vivienda.municipioid+"") {
+                    return true; // Si encuentra una vivienda existente, retorna true
+                }
+            }
+    
+            return false; // Si no encontró ninguna vivienda con la misma dirección y municipio, retorna false
+        } catch (err) {
+            console.error("Error inesperado:", err);
+            return false;
+        }
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setVivienda({ ...vivienda, [name]: value });
@@ -55,6 +82,10 @@ const CrearVivienda = () => {
                 setPisosError("");
             }
         }
+
+        if (name === "direccion") {
+            setDireccionExistenteError(""); // Limpiar error cuando el usuario cambia la dirección
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -67,6 +98,13 @@ const CrearVivienda = () => {
 
         if (pisosError || vivienda.pisos <= 0 || vivienda.pisos === "") {
             setPisosError("El número de pisos debe ser un número mayor que 0.");
+            return;
+        }
+
+        // Verificar si ya existe una vivienda con la misma dirección en el mismo municipio
+        const viviendaExistente = await checkViviendaExistente();
+        if (viviendaExistente) {
+            setDireccionExistenteError("Ya existe una vivienda con esta dirección en el municipio seleccionado.");
             return;
         }
 
@@ -100,6 +138,7 @@ const CrearVivienda = () => {
                     onChange={handleChange}
                     required
                 />
+                {direccionExistenteError && <p style={{ color: "red" }}>{direccionExistenteError}</p>} {/* Mostrar error si existe */}
                 <input
                     type="number"
                     name="capacidad"
