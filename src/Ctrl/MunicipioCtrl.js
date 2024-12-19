@@ -42,7 +42,7 @@ export const deleteMunicipio = async (id) => {
 
     // Eliminar cada departamento relacionado con el país
     for (let departamento of departamentos) {
-      const { error: deleteDeptError } = await deleteMunicipio(departamento.id_vivienda)
+      const { error: deleteDeptError } = await deleteVivienda(departamento.id_vivienda)
       if (deleteDeptError) {
         console.error(`Error al eliminar la vivienda con ID ${departamento.id_vivienda}:`, deleteDeptError);
         return { data: [], error: deleteDeptError };
