@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPersona, readAllPersona, readPersona } from "../../Ctrl/PersonaCtrl";
+import { createPersona, readAllPersona } from "../../Ctrl/PersonaCtrl";
 import "../Comun.css";
 
 const CrearPersona = () => {
@@ -15,13 +15,13 @@ const CrearPersona = () => {
   const [cargando, setCargando] = useState(false);
   const [edadError, setEdadError] = useState("");
   const [telefonoError, setTelefonoError] = useState("");
-  const [creacionExitosa, setCreacionExitosa] = useState(false); // Estado para indicar éxito
+  const [creacionExitosa, setCreacionExitosa] = useState(false);
   const navegar = useNavigate();
 
   useEffect(() => {
     const cargarPersonasCabeza = async () => {
       try {
-        setCargando(true); // Empieza la carga
+        setCargando(true);
         const { data, error } = await readAllPersona();
         if (error) {
           console.error("Error al obtener personas:", error);
@@ -34,7 +34,7 @@ const CrearPersona = () => {
         console.error("Error inesperado:", err);
         alert("Hubo un error al cargar las personas.");
       } finally {
-        setCargando(false); // Termina la carga
+        setCargando(false);
       }
     };
 
@@ -65,46 +65,14 @@ const CrearPersona = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Verificación de edad
     if (edadError || persona.edad <= 0 || persona.edad === "") {
       setEdadError("La edad debe ser un número mayor que 0.");
-      return; // No continuar si hay un error en la edad
+      return; 
     }
 
-    // Verificación de teléfono
     if (telefonoError || persona.telefono.length < 7) {
       setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
-      return; // No continuar si hay un error en el teléfono
-    }
-
-    // Verificación de la persona cabeza de familia
-    if (persona.cabezafamilia !== null) {
-      for (let i = 0; i < personasCabeza.length; i++) {
-        if (persona.cabezafamilia + "" === personasCabeza[i].cabezafamilia + "") {
-          console.error("No se puede modificar la persona porque es cabeza de familia de otras personas");
-          alert("No se puede modificar la persona porque es cabeza de familia de otras personas");
-          return;
-        }
-      }
-
-      try {
-        const { data, error } = await readPersona(persona.cabezafamilia);
-        if (error) {
-          console.error("Error al cargar la persona cabeza de familia:", error);
-          alert("Hubo un problema al verificar la persona cabeza de familia.");
-          return;
-        }
-
-        const personaSeleccionada = data[0];
-        if (personaSeleccionada && personaSeleccionada.cabezafamilia !== null) {
-          alert("La persona seleccionada como cabeza de familia ya tiene asignado un cabeza de familia.");
-          return; // No continuar si ya tiene un cabeza de familia
-        }
-      } catch (err) {
-        console.error("Error inesperado al verificar la persona cabeza de familia:", err);
-        alert("Hubo un error al verificar la persona cabeza de familia.");
-        return;
-      }
+      return;
     }
 
     if (persona.cabezafamilia === "Seleccionar Cabeza de Familia (opcional)") {

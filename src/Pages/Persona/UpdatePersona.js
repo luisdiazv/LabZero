@@ -89,36 +89,6 @@ const ModificarPersona = () => {
       return; // No continuar si hay un error en el teléfono
     }
 
-    // Verificación de la persona cabeza de familia
-    if (persona.cabezafamilia !== null) {
-
-      for (let i = 0; i < personasCabeza.length; i++) {
-        if (persona.cabezafamilia+"" === personasCabeza[i].cabezafamilia+"") {
-          console.error("No se puede modificar la persona porque es cabeza de familia de otras personas",);
-          alert("No se puede modificar la persona porque es cabeza de familia de otras personas");
-          return;
-        }
-      }
-
-      try {
-        const { data, error } = await readPersona(persona.cabezafamilia);
-        if (error) {
-          console.error("Error al cargar la persona cabeza de familia:", error);
-          alert("Hubo un problema al verificar la persona cabeza de familia.");
-          return;
-        }
-
-        const personaSeleccionada = data[0];
-        if (personaSeleccionada && personaSeleccionada.cabezafamilia !== null) {
-          alert("La persona seleccionada como cabeza de familia ya tiene asignado un cabezafamilia.");
-          return; // No continuar si ya tiene un cabezafamilia
-        }
-      } catch (err) {
-        console.error("Error inesperado al verificar la persona cabeza de familia:", err);
-        alert("Hubo un error al verificar la persona cabeza de familia.");
-        return;
-      }
-    }
     if (persona.cabezafamilia === "Seleccionar Cabeza de Familia (opcional)") {
       persona.cabezafamilia = null;
     }
