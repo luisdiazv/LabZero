@@ -102,22 +102,6 @@ export const deletePersona = async (id) => {
 
 export const createPersona = async (persona) => {
   try {
-    if (persona.cabezafamilia) {
-      // Validar que la persona asignada como cabezafamilia no sea ya un cabezafamilia
-      const { data: existingHead, error: validationError } = await restAPI.from("persona").select("id_persona").eq("cabezafamilia", persona.cabezafamilia);
-
-      if (validationError) {
-        console.error("Error validando cabezafamilia:", validationError);
-        return { data: null, error: "Error validando cabezafamilia" };
-      }
-
-      if (existingHead.length > 0) {
-        return {
-          data: null,
-          error: `La persona seleccionada como cabezafamilia (${persona.cabezafamilia}) ya es cabezafamilia de otra persona.`,
-        };
-      }
-    }
 
     // Si la validación pasa, insertar la persona
     const { data, error } = await restAPI.from("persona").insert(persona);
