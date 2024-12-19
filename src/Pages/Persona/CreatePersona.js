@@ -1,36 +1,40 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { createPersona, readAllPersona } from "../../Ctrl/PersonaCtrl";
+import { createPersona, readAllPersona, readPersona } from "../../Ctrl/PersonaCtrl";
+import "../Comun.css";
 
 const CrearPersona = () => {
   const [persona, setPersona] = useState({
     nombre: "",
     telefono: "",
     edad: "",
-    sexo: "",
-    cabezafamilia: null,
+    sexo: "Masculino",
+    cabezafamilia: null
   });
   const [personasCabeza, setPersonasCabeza] = useState([]);
   const [cargando, setCargando] = useState(false);
   const [edadError, setEdadError] = useState("");
   const [telefonoError, setTelefonoError] = useState("");
+  const [creacionExitosa, setCreacionExitosa] = useState(false); // Estado para indicar éxito
   const navegar = useNavigate();
 
-  // Cargar las personas que son cabeza de familia
   useEffect(() => {
     const cargarPersonasCabeza = async () => {
       try {
+        setCargando(true); // Empieza la carga
         const { data, error } = await readAllPersona();
         if (error) {
           console.error("Error al obtener personas:", error);
           alert("Hubo un problema al cargar las personas.");
         } else {
-          const cabezaPersonas = data.filter((persona) => persona.cabezafamilia);
+          const cabezaPersonas = data.filter((persona) => persona.id_persona);
           setPersonasCabeza(cabezaPersonas);
         }
       } catch (err) {
         console.error("Error inesperado:", err);
         alert("Hubo un error al cargar las personas.");
+      } finally {
+        setCargando(false); // Termina la carga
       }
     };
 
@@ -61,96 +65,154 @@ const CrearPersona = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Verificación de edad
     if (edadError || persona.edad <= 0 || persona.edad === "") {
       setEdadError("La edad debe ser un número mayor que 0.");
-      return;
+      return; // No continuar si hay un error en la edad
     }
 
+    // Verificación de teléfono
     if (telefonoError || persona.telefono.length < 7) {
       setTelefonoError("El teléfono debe tener al menos 7 dígitos.");
-      return;
+      return; // No continuar si hay un error en el teléfono
     }
 
-    setCargando(true);
+    // Verificación de la persona cabeza de familia
+    if (persona.cabezafamilia !== null) {
+      for (let i = 0; i < personasCabeza.length; i++) {
+        if (persona.cabezafamilia + "" === personasCabeza[i].cabezafamilia + "") {
+          console.error("No se puede modificar la persona porque es cabeza de familia de otras personas");
+          alert("No se puede modificar la persona porque es cabeza de familia de otras personas");
+          return;
+        }
+      }
+
+      try {
+        const { data, error } = await readPersona(persona.cabezafamilia);
+        if (error) {
+          console.error("Error al cargar la persona cabeza de familia:", error);
+          alert("Hubo un problema al verificar la persona cabeza de familia.");
+          return;
+        }
+
+        const personaSeleccionada = data[0];
+        if (personaSeleccionada && personaSeleccionada.cabezafamilia !== null) {
+          alert("La persona seleccionada como cabeza de familia ya tiene asignado un cabeza de familia.");
+          return; // No continuar si ya tiene un cabeza de familia
+        }
+      } catch (err) {
+        console.error("Error inesperado al verificar la persona cabeza de familia:", err);
+        alert("Hubo un error al verificar la persona cabeza de familia.");
+        return;
+      }
+    }
+
+    if (persona.cabezafamilia === "Seleccionar Cabeza de Familia (opcional)") {
+      persona.cabezafamilia = null;
+    }
+
+    setCargando(true); // Empieza el proceso de creación
+    setCreacionExitosa(false); // Asegura que se reinicie el estado de éxito
+
     try {
       const { error } = await createPersona(persona);
       if (error) {
         console.error("Error al crear persona:", error);
-        alert("Hubo un error al crear la persona.");
+        alert("Hubo un problema al crear la persona.");
       } else {
+        setCreacionExitosa(true); // Marcar como exitoso
         alert("Persona creada exitosamente.");
-        navegar("/personas");
+        navegar("/personas"); // Redirigir a la lista de personas después de la creación exitosa
       }
     } catch (err) {
-      console.error("Error inesperado:", err);
+      console.error("Error inesperado al crear la persona:", err);
       alert("Hubo un error inesperado al crear la persona.");
     } finally {
-      setCargando(false);
+      setCargando(false); // Termina el proceso de creación, incluso si hay error
     }
   };
 
   return (
     <div className="container">
-      <h1>Crear Persona</h1>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="nombre"
-          placeholder="Nombre"
-          value={persona.nombre}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="text"
-          name="telefono"
-          placeholder="Teléfono"
-          value={persona.telefono}
-          onChange={handleChange}
-          required
-        />
-        {telefonoError && <p style={{ color: "red" }}>{telefonoError}</p>}
-        <input
-          type="number"
-          name="edad"
-          placeholder="Edad"
-          value={persona.edad}
-          onChange={handleChange}
-          required
-        />
-        {edadError && <p style={{ color: "red" }}>{edadError}</p>}
-        <select name="sexo" value={persona.sexo} onChange={handleChange} required>
-          <option value="">Seleccione el Sexo</option>
-          <option value="Masculino">Masculino</option>
-          <option value="Femenino">Femenino</option>
-        </select>
-        <select
-          name="cabezafamilia"
-          value={persona.cabezafamilia}
-          onChange={handleChange}
-        >
-          <option value={null}>Seleccionar Cabeza de Familia (opcional)</option>
-          {personasCabeza.map((cabeza) => (
-            <option key={cabeza.id_persona} value={cabeza.id_persona}>
-              {cabeza.nombre} (ID: {cabeza.id_persona})
-            </option>
-          ))}
-        </select>
-
-        {/* Botones en la misma línea */}
-        <div className="form-buttons">
-          <button type="submit" disabled={cargando} className="form-button form-button-small">
-            {cargando ? "Creando..." : "Crear"}
-          </button>
-          <button
-            type="button"
-            onClick={() => navegar("/personas")}
-            className="form-button cancel-button red-button"
+      <h1 className="form-title">Crear Persona</h1>
+      {cargando ? (
+        <p className="loading-text">Cargando...</p>
+      ) : (
+        <form className="crud-form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="nombre"
+            placeholder="Nombre"
+            value={persona.nombre}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+          <input
+            type="text"
+            name="telefono"
+            placeholder="Teléfono"
+            value={persona.telefono}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+          {telefonoError && <p className="error-message">{telefonoError}</p>}
+          <input
+            type="number"
+            name="edad"
+            placeholder="Edad"
+            value={persona.edad}
+            onChange={handleChange}
+            required
+            className="form-input"
+          />
+          {edadError && <p className="error-message">{edadError}</p>}
+          <select
+            name="sexo"
+            value={persona.sexo}
+            onChange={handleChange}
+            required
+            className="form-select"
           >
-            Cancelar y volver
-          </button>
-        </div>
-      </form>
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+          </select>
+
+          <select
+            name="cabezafamilia"
+            value={persona.cabezafamilia}
+            onChange={handleChange}
+            className="form-select"
+          >
+            <option value={null}>Seleccionar Cabeza de Familia (opcional)</option>
+            {personasCabeza
+              .filter((cabeza) => cabeza.id_persona !== persona.id_persona) // Excluir a sí mismo
+              .map((cabeza) => (
+                <option key={cabeza.id_persona} value={cabeza.id_persona}>
+                  {cabeza.nombre} (ID: {cabeza.id_persona})
+                </option>
+              ))}
+          </select>
+
+          <div className="form-buttons">
+            <button
+              type="submit"
+              disabled={cargando || creacionExitosa}
+              className="form-button form-button-small"
+            >
+              {creacionExitosa ? "Creada" : (cargando ? "Creando..." : "Crear")}
+            </button>
+            <button
+              type="button"
+              onClick={() => navegar("/personas")}
+              className="form-button cancel-button red-button"
+            >
+              Cancelar y volver
+            </button>
+          </div>
+        </form>
+      )}
     </div>
   );
 };

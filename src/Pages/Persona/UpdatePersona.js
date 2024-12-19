@@ -40,7 +40,7 @@ const ModificarPersona = () => {
           console.error("Error al obtener personas:", error);
           alert("Hubo un problema al cargar las personas.");
         } else {
-          const cabezaPersonas = data.filter((persona) => persona.cabezafamilia);
+          const cabezaPersonas = data.filter((persona) => persona.id_persona);
           setPersonasCabeza(cabezaPersonas);
         }
       } catch (err) {
@@ -90,7 +90,16 @@ const ModificarPersona = () => {
     }
 
     // Verificación de la persona cabeza de familia
-    if (persona.cabezafamilia !== "Seleccionar Cabeza de Familia (opcional)") {
+    if (persona.cabezafamilia !== null) {
+
+      for (let i = 0; i < personasCabeza.length; i++) {
+        if (persona.cabezafamilia+"" === personasCabeza[i].cabezafamilia+"") {
+          console.error("No se puede modificar la persona porque es cabeza de familia de otras personas",);
+          alert("No se puede modificar la persona porque es cabeza de familia de otras personas");
+          return;
+        }
+      }
+
       try {
         const { data, error } = await readPersona(persona.cabezafamilia);
         if (error) {

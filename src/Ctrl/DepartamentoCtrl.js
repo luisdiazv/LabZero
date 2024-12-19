@@ -1,4 +1,5 @@
 import { restAPI } from "../API/postgRestAPI";
+import { deleteMunicipio } from "./MunicipioCtrl";
 
 export const readAllDepartamento = async () => {
     try {
@@ -31,12 +32,21 @@ export const readDepartamento = async (id) => {
 
 export const deleteDepartamento = async (id) => {
     try {
-        const { error: errorRefsDef } = await restAPI.from("municipio").delete().eq("departamentoid", id);
+        // Obtener todos los departamentos que pertenecen al país
+    const { data: departamentos, error: departamentosError } = await restAPI.from("municipio").select("*").eq("departamentoid", id);
+    if (departamentosError) {
+      console.error("Error al obtener los municipios:", departamentosError);
+      return { data: [], error: departamentosError };
+    }
 
-        if (errorRefsDef) {
-            console.error(`Error eliminando referencias definitivas en Municipio:`, errorRefsDef);
-            return { data: [], error: errorRefsDef };
-        }
+    // Eliminar cada departamento relacionado con el país
+    for (let departamento of departamentos) {
+      const { error: deleteDeptError } = await deleteMunicipio(departamento.id_municipio)
+      if (deleteDeptError) {
+        console.error(`Error al eliminar el departamento con ID ${departamento.id_municipio}:`, deleteDeptError);
+        return { data: [], error: deleteDeptError };
+      }
+    }
         const { data, error } = await restAPI.from("departamento").delete().eq("id_departamento", id);
         if (error) {
             console.error(`Error al eliminar departamento con ID ${id}: `, error);
@@ -83,4 +93,4 @@ export const updateDepartamento = async (id, updates) => {
         console.error(`Error inesperado al modificar departamento con ID ${id}:`, err);
         return { data: null, error: err };
     }
-};
+}
